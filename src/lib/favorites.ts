@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Recipe } from "@prisma/client";
 import type { RecipeSummary } from "@/lib/recipes";
 
 function parseTags(raw: string): string[] {
@@ -19,7 +20,7 @@ export async function getFavoriteRecipesForUser(userId: string): Promise<RecipeS
     include: { recipe: true },
     orderBy: { createdAt: "desc" },
   });
-  return favorites.map(({ recipe: r }) => ({
+  return favorites.map(({ recipe: r }: { recipe: Recipe }) => ({
     id: r.id,
     slug: r.slug,
     title: r.title,
