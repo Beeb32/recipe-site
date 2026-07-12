@@ -51,11 +51,16 @@ model Ingredient {
 // line ("1 lb ground beef") shown on the recipe page; ingredientId is what
 // ingredient-based search actually matches against. position preserves the
 // original ingredient list order (relational rows have no implicit order).
+// quantity is the parsed leading amount (e.g. 1 for "1 onion, diced", 0.5
+// for "1/2 lemon, juiced") - null when the line has no clean numeric amount
+// ("Salt to taste") - used to rank ingredient-search matches by how much of
+// that ingredient a recipe actually uses.
 model RecipeIngredient {
   id           String     @id @default(cuid())
   recipeId     String
   ingredientId String
   displayText  String
+  quantity     Float?
   position     Int
   recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)

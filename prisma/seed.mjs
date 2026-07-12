@@ -10,9 +10,10 @@ const adapter = databaseUrl.startsWith("libsql:")
 const prisma = new PrismaClient({ adapter });
 
 // Each ingredient line pairs the exact display text (shown on the recipe
-// page as-is) with a canonical ingredient name (what "what can I cook with
-// X" search actually matches against) - one ingredient per line, so a couple
-// of the original combined lines ("salt and pepper to taste") are split.
+// page as-is), a canonical ingredient name (what "what can I cook with X"
+// search matches against), and a parsed quantity (null when the line has no
+// clean numeric amount, e.g. "Salt to taste") used to rank search matches by
+// how much of that ingredient a recipe actually uses.
 const recipes = [
   {
     slug: "classic-margherita-pizza",
@@ -23,12 +24,12 @@ const recipes = [
     cookTimeMinutes: 25,
     servings: 4,
     ingredients: [
-      { text: "1 pizza dough ball", ingredient: "pizza dough" },
-      { text: "1/2 cup crushed San Marzano tomatoes", ingredient: "tomato" },
-      { text: "8 oz fresh mozzarella, torn", ingredient: "mozzarella" },
-      { text: "Fresh basil leaves", ingredient: "basil" },
-      { text: "2 tbsp olive oil", ingredient: "olive oil" },
-      { text: "Salt to taste", ingredient: "salt" },
+      { text: "1 pizza dough ball", ingredient: "pizza dough", quantity: 1 },
+      { text: "1/2 cup crushed San Marzano tomatoes", ingredient: "tomato", quantity: 0.5 },
+      { text: "8 oz fresh mozzarella, torn", ingredient: "mozzarella", quantity: 8 },
+      { text: "Fresh basil leaves", ingredient: "basil", quantity: null },
+      { text: "2 tbsp olive oil", ingredient: "olive oil", quantity: 2 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
     ],
     steps: [
       "Preheat oven (with a pizza stone if you have one) to 500°F / 260°C.",
@@ -49,15 +50,15 @@ const recipes = [
     cookTimeMinutes: 30,
     servings: 4,
     ingredients: [
-      { text: "2 cans chickpeas, drained", ingredient: "chickpeas" },
-      { text: "1 can coconut milk", ingredient: "coconut milk" },
-      { text: "1 can diced tomatoes", ingredient: "tomato" },
-      { text: "1 onion, diced", ingredient: "onion" },
-      { text: "3 cloves garlic, minced", ingredient: "garlic" },
-      { text: "1 tbsp curry powder", ingredient: "curry powder" },
-      { text: "1 tsp chili flakes", ingredient: "chili flakes" },
-      { text: "2 tbsp vegetable oil", ingredient: "vegetable oil" },
-      { text: "Salt to taste", ingredient: "salt" },
+      { text: "2 cans chickpeas, drained", ingredient: "chickpeas", quantity: 2 },
+      { text: "1 can coconut milk", ingredient: "coconut milk", quantity: 1 },
+      { text: "1 can diced tomatoes", ingredient: "tomato", quantity: 1 },
+      { text: "1 onion, diced", ingredient: "onion", quantity: 1 },
+      { text: "3 cloves garlic, minced", ingredient: "garlic", quantity: 3 },
+      { text: "1 tbsp curry powder", ingredient: "curry powder", quantity: 1 },
+      { text: "1 tsp chili flakes", ingredient: "chili flakes", quantity: 1 },
+      { text: "2 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 2 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
     ],
     steps: [
       "Heat the oil in a large pot and sauté the onion until soft, about 5 minutes.",
@@ -77,15 +78,15 @@ const recipes = [
     cookTimeMinutes: 20,
     servings: 24,
     ingredients: [
-      { text: "2 1/4 cups all-purpose flour", ingredient: "flour" },
-      { text: "1 tsp baking soda", ingredient: "baking soda" },
-      { text: "1 tsp salt", ingredient: "salt" },
-      { text: "1 cup butter, softened", ingredient: "butter" },
-      { text: "3/4 cup granulated sugar", ingredient: "sugar" },
-      { text: "3/4 cup brown sugar", ingredient: "brown sugar" },
-      { text: "2 large eggs", ingredient: "eggs" },
-      { text: "2 tsp vanilla extract", ingredient: "vanilla extract" },
-      { text: "2 cups chocolate chips", ingredient: "chocolate chips" },
+      { text: "2 1/4 cups all-purpose flour", ingredient: "flour", quantity: 2.25 },
+      { text: "1 tsp baking soda", ingredient: "baking soda", quantity: 1 },
+      { text: "1 tsp salt", ingredient: "salt", quantity: 1 },
+      { text: "1 cup butter, softened", ingredient: "butter", quantity: 1 },
+      { text: "3/4 cup granulated sugar", ingredient: "sugar", quantity: 0.75 },
+      { text: "3/4 cup brown sugar", ingredient: "brown sugar", quantity: 0.75 },
+      { text: "2 large eggs", ingredient: "eggs", quantity: 2 },
+      { text: "2 tsp vanilla extract", ingredient: "vanilla extract", quantity: 2 },
+      { text: "2 cups chocolate chips", ingredient: "chocolate chips", quantity: 2 },
     ],
     steps: [
       "Preheat oven to 375°F / 190°C.",
@@ -105,13 +106,13 @@ const recipes = [
     cookTimeMinutes: 10,
     servings: 1,
     ingredients: [
-      { text: "2 slices sourdough bread", ingredient: "sourdough bread" },
-      { text: "1 ripe avocado", ingredient: "avocado" },
-      { text: "1/2 lemon, juiced", ingredient: "lemon" },
-      { text: "Chili flakes", ingredient: "chili flakes" },
-      { text: "Salt to taste", ingredient: "salt" },
-      { text: "Pepper to taste", ingredient: "pepper" },
-      { text: "Olive oil for drizzling", ingredient: "olive oil" },
+      { text: "2 slices sourdough bread", ingredient: "sourdough bread", quantity: 2 },
+      { text: "1 ripe avocado", ingredient: "avocado", quantity: 1 },
+      { text: "1/2 lemon, juiced", ingredient: "lemon", quantity: 0.5 },
+      { text: "Chili flakes", ingredient: "chili flakes", quantity: null },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
+      { text: "Olive oil for drizzling", ingredient: "olive oil", quantity: null },
     ],
     steps: [
       "Toast the sourdough slices until golden and crisp.",
@@ -129,15 +130,15 @@ const recipes = [
     cookTimeMinutes: 20,
     servings: 4,
     ingredients: [
-      { text: "1 lb ground beef", ingredient: "ground beef" },
-      { text: "8 small corn tortillas", ingredient: "corn tortillas" },
-      { text: "1 tbsp chili powder", ingredient: "chili powder" },
-      { text: "1 tsp cumin", ingredient: "cumin" },
-      { text: "1/2 tsp paprika", ingredient: "paprika" },
-      { text: "1 onion, diced", ingredient: "onion" },
-      { text: "Shredded lettuce for topping", ingredient: "lettuce" },
-      { text: "Diced tomato for topping", ingredient: "tomato" },
-      { text: "Shredded cheese for topping", ingredient: "cheese" },
+      { text: "1 lb ground beef", ingredient: "ground beef", quantity: 1 },
+      { text: "8 small corn tortillas", ingredient: "corn tortillas", quantity: 8 },
+      { text: "1 tbsp chili powder", ingredient: "chili powder", quantity: 1 },
+      { text: "1 tsp cumin", ingredient: "cumin", quantity: 1 },
+      { text: "1/2 tsp paprika", ingredient: "paprika", quantity: 0.5 },
+      { text: "1 onion, diced", ingredient: "onion", quantity: 1 },
+      { text: "Shredded lettuce for topping", ingredient: "lettuce", quantity: null },
+      { text: "Diced tomato for topping", ingredient: "tomato", quantity: null },
+      { text: "Shredded cheese for topping", ingredient: "cheese", quantity: null },
     ],
     steps: [
       "Cook the diced onion in a pan over medium heat until softened.",
@@ -180,7 +181,7 @@ async function main() {
     await prisma.recipeIngredient.deleteMany({ where: { recipeId: created.id } });
 
     for (let i = 0; i < recipe.ingredients.length; i++) {
-      const { text, ingredient } = recipe.ingredients[i];
+      const { text, ingredient, quantity } = recipe.ingredients[i];
       const ingredientRow = await prisma.ingredient.upsert({
         where: { name: ingredient },
         update: {},
@@ -191,6 +192,7 @@ async function main() {
           recipeId: created.id,
           ingredientId: ingredientRow.id,
           displayText: text,
+          quantity: quantity,
           position: i,
         },
       });

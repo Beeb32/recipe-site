@@ -1,6 +1,11 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 
+export type IngredientEntry = {
+  name: string;
+  quantity: number | null;
+};
+
 export type RecipeSummary = {
   id: string;
   slug: string;
@@ -10,9 +15,10 @@ export type RecipeSummary = {
   cookTimeMinutes: number;
   servings: number;
   tags: string[];
-  // Canonical ingredient names (e.g. "red pepper") - what ingredient-based
-  // search matches against, separate from the display text shown on the page.
-  ingredientNames: string[];
+  // Canonical ingredient names + quantity used (e.g. "red pepper", 2) - what
+  // ingredient-based search matches and ranks against, separate from the
+  // display text shown on the page.
+  ingredientEntries: IngredientEntry[];
 };
 
 export type RecipeDetail = RecipeSummary & {
@@ -38,7 +44,10 @@ export async function getAllRecipes(): Promise<RecipeSummary[]> {
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     tags: parseJsonArray(r.tags),
-    ingredientNames: r.recipeIngredients.map((ri) => ri.ingredient.name),
+    ingredientEntries: r.recipeIngredients.map((ri) => ({
+      name: ri.ingredient.name,
+      quantity: ri.quantity,
+    })),
   }));
 }
 
@@ -62,7 +71,10 @@ export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     ingredients: r.recipeIngredients.map((ri) => ri.displayText),
-    ingredientNames: r.recipeIngredients.map((ri) => ri.ingredient.name),
+    ingredientEntries: r.recipeIngredients.map((ri) => ({
+      name: ri.ingredient.name,
+      quantity: ri.quantity,
+    })),
     steps: parseJsonArray(r.steps),
     tags: parseJsonArray(r.tags),
   };

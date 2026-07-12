@@ -15,14 +15,29 @@ export function RecipeBrowser({
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [maxTime, setMaxTime] = useState<number | null>(null);
 
+  // For a given search term, how much of the matched ingredient this recipe
+  // uses (the highest quantity among any matching ingredient entries, or
+  // null if nothing matched by ingredient at all). Matches either direction
+  // so "red peppers" (plural) still finds an ingredient named "red pepper"
+  // (singular), and vice versa.
+  function matchedIngredientQuantity(r: RecipeSummary, q: string): number | null {
+    let best: number | null = null;
+    for (const entry of r.ingredientEntries) {
+      if (entry.name.includes(q) || q.includes(entry.name)) {
+        if (entry.quantity !== null && (best === null || entry.quantity > best)) {
+          best = entry.quantity;
+        } else if (best === null) {
+          best = 0;
+        }
+      }
+    }
+    return best;
+  }
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return recipes.filter((r) => {
-      // Matches either direction so "red peppers" (plural) still finds an
-      // ingredient named "red pepper" (singular), and vice versa.
-      const matchesIngredient = r.ingredientNames.some(
-        (name) => name.includes(q) || q.includes(name)
-      );
+    const matches = recipes.filter((r) => {
+      const matchesIngredient = matchedIngredientQuantity(r, q) !== null;
       const matchesQuery =
         q.length === 0 ||
         r.title.toLowerCase().includes(q) ||
@@ -32,6 +47,19 @@ export function RecipeBrowser({
       const matchesTime = !maxTime || r.cookTimeMinutes <= maxTime;
       return matchesQuery && matchesTag && matchesTime;
     });
+
+    // Rank ingredient matches by quantity used, highest first, so "onion"
+    // surfaces the recipe that uses the most onions at the top - helps use
+    // up a surplus of whatever's on hand. Non-ingredient matches (title/
+    // description only) sort after, keeping their original relative order.
+    if (q.length > 0) {
+      return [...matches].sort((a, b) => {
+        const qa = matchedIngredientQuantity(a, q) ?? -1;
+        const qb = matchedIngredientQuantity(b, q) ?? -1;
+        return qb - qa;
+      });
+    }
+    return matches;
   }, [recipes, query, activeTag, maxTime]);
 
   return (
