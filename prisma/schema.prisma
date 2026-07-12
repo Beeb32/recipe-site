@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime   @default(now())
+  favorites    Favorite[]
+  ratings      Rating[]
+  comments     Comment[]
+}
+
+model Recipe {
+  id              String     @id @default(cuid())
+  slug            String     @unique
+  title           String
+  description     String
+  imageEmoji      String
+  cookTimeMinutes Int
+  servings        Int
+  // Small, fixed recipe count for now - stored as JSON text rather than
+  // normalized child tables, since there's no need yet to query across
+  // individual ingredients/steps/tags independently of their recipe.
+  ingredients     String
+  steps           String
+  tags            String
+  createdAt       DateTime   @default(now())
+  favorites       Favorite[]
+  ratings         Rating[]
+  comments        Comment[]
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  userId    String
+  recipeId  String
+  value     Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  recipeId  String
+  body      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
