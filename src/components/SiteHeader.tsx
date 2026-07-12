@@ -9,7 +9,7 @@ export async function SiteHeader() {
     <header className="border-b border-black/10 dark:border-white/15">
       <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/" className="font-semibold tracking-tight">
-          🍳 Home Cooked
+          🍳 What to cook
         </Link>
         <nav className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
           {user ? (

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Home Cooked",
+  title: "What to cook",
   description: "Browse, search, and cook from a small shared recipe collection.",
 };
 
