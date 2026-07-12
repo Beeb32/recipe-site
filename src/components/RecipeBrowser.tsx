@@ -11,7 +11,8 @@ export function RecipeBrowser({
   recipes: RecipeSummary[];
   allTags: string[];
 }) {
-  const [query, setQuery] = useState("");
+  const [nameQuery, setNameQuery] = useState("");
+  const [ingredientQuery, setIngredientQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [maxTime, setMaxTime] = useState<number | null>(null);
 
@@ -35,43 +36,54 @@ export function RecipeBrowser({
   }
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const nameQ = nameQuery.trim().toLowerCase();
+    const ingredientQ = ingredientQuery.trim().toLowerCase();
+
     const matches = recipes.filter((r) => {
-      const matchesIngredient = matchedIngredientQuantity(r, q) !== null;
-      const matchesQuery =
-        q.length === 0 ||
-        r.title.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q) ||
-        matchesIngredient;
+      const matchesName =
+        nameQ.length === 0 ||
+        r.title.toLowerCase().includes(nameQ) ||
+        r.description.toLowerCase().includes(nameQ);
+      const matchesIngredient =
+        ingredientQ.length === 0 || matchedIngredientQuantity(r, ingredientQ) !== null;
       const matchesTag = !activeTag || r.tags.includes(activeTag);
       const matchesTime = !maxTime || r.cookTimeMinutes <= maxTime;
-      return matchesQuery && matchesTag && matchesTime;
+      return matchesName && matchesIngredient && matchesTag && matchesTime;
     });
 
-    // Rank ingredient matches by quantity used, highest first, so "onion"
-    // surfaces the recipe that uses the most onions at the top - helps use
-    // up a surplus of whatever's on hand. Non-ingredient matches (title/
-    // description only) sort after, keeping their original relative order.
-    if (q.length > 0) {
+    // Rank by quantity used, highest first, so searching an ingredient
+    // surfaces the recipe using the most of it at the top - helps use up a
+    // surplus of whatever's on hand. Recipes with no parsed quantity for
+    // that ingredient sort after, keeping their original relative order.
+    if (ingredientQ.length > 0) {
       return [...matches].sort((a, b) => {
-        const qa = matchedIngredientQuantity(a, q) ?? -1;
-        const qb = matchedIngredientQuantity(b, q) ?? -1;
+        const qa = matchedIngredientQuantity(a, ingredientQ) ?? -1;
+        const qb = matchedIngredientQuantity(b, ingredientQ) ?? -1;
         return qb - qa;
       });
     }
     return matches;
-  }, [recipes, query, activeTag, maxTime]);
+  }, [recipes, nameQuery, ingredientQuery, activeTag, maxTime]);
 
   return (
     <div>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by name or ingredient..."
-          className="w-full sm:w-72 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
-        />
+        <div className="flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
+          <input
+            type="text"
+            value={nameQuery}
+            onChange={(e) => setNameQuery(e.target.value)}
+            placeholder="Search by recipe name..."
+            className="w-full sm:w-64 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
+          />
+          <input
+            type="text"
+            value={ingredientQuery}
+            onChange={(e) => setIngredientQuery(e.target.value)}
+            placeholder="Search by ingredient..."
+            className="w-full sm:w-64 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
+          />
+        </div>
         <select
           value={maxTime ?? ""}
           onChange={(e) => setMaxTime(e.target.value ? Number(e.target.value) : null)}
