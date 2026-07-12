@@ -16,15 +16,23 @@ export function RecipeBrowser({
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [maxTime, setMaxTime] = useState<number | null>(null);
 
+  // Prefix/substring match ("chocolate" finds "chocolate chips"), plus an
+  // exact singular/plural check ("red peppers" finds "red pepper" and vice
+  // versa) - deliberately NOT a loose "query contains name" check in general,
+  // since that let short names like "pepper" false-match inside unrelated
+  // longer queries like "red peppers" (which does contain the substring
+  // "pepper"). Requiring the plural to be an exact +s/-s match avoids that.
+  function ingredientNameMatches(entryName: string, q: string): boolean {
+    return entryName.includes(q) || q === `${entryName}s` || entryName === `${q}s`;
+  }
+
   // For a given search term, how much of the matched ingredient this recipe
   // uses (the highest quantity among any matching ingredient entries, or
-  // null if nothing matched by ingredient at all). Matches either direction
-  // so "red peppers" (plural) still finds an ingredient named "red pepper"
-  // (singular), and vice versa.
+  // null if nothing matched by ingredient at all).
   function matchedIngredientQuantity(r: RecipeSummary, q: string): number | null {
     let best: number | null = null;
     for (const entry of r.ingredientEntries) {
-      if (entry.name.includes(q) || q.includes(entry.name)) {
+      if (ingredientNameMatches(entry.name, q)) {
         if (entry.quantity !== null && (best === null || entry.quantity > best)) {
           best = entry.quantity;
         } else if (best === null) {
