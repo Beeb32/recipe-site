@@ -18,23 +18,49 @@ model User {
 }
 
 model Recipe {
-  id              String     @id @default(cuid())
-  slug            String     @unique
-  title           String
-  description     String
-  imageEmoji      String
-  cookTimeMinutes Int
-  servings        Int
-  // Small, fixed recipe count for now - stored as JSON text rather than
-  // normalized child tables, since there's no need yet to query across
-  // individual ingredients/steps/tags independently of their recipe.
-  ingredients     String
-  steps           String
-  tags            String
-  createdAt       DateTime   @default(now())
-  favorites       Favorite[]
-  ratings         Rating[]
-  comments        Comment[]
+  id                String             @id @default(cuid())
+  slug              String             @unique
+  title             String
+  description       String
+  imageEmoji        String
+  cookTimeMinutes   Int
+  servings          Int
+  // Steps and tags stay as JSON text - no need to query across individual
+  // steps/tags independently of their recipe. Ingredients are normalized
+  // (see RecipeIngredient/Ingredient below) so "what can I cook with X"
+  // can search by canonical ingredient name instead of noisy free text.
+  steps             String
+  tags              String
+  createdAt         DateTime           @default(now())
+  favorites         Favorite[]
+  ratings           Rating[]
+  comments          Comment[]
+  recipeIngredients RecipeIngredient[]
+}
+
+// Canonical ingredient name (e.g. "red pepper", "ground beef") - shared
+// across recipes so a search for one ingredient finds every recipe that
+// uses it, regardless of how that recipe's own text happens to phrase it.
+model Ingredient {
+  id                String             @id @default(cuid())
+  name              String             @unique
+  recipeIngredients RecipeIngredient[]
+}
+
+// One ingredient line within one recipe. displayText is the exact original
+// line ("1 lb ground beef") shown on the recipe page; ingredientId is what
+// ingredient-based search actually matches against. position preserves the
+// original ingredient list order (relational rows have no implicit order).
+model RecipeIngredient {
+  id           String     @id @default(cuid())
+  recipeId     String
+  ingredientId String
+  displayText  String
+  position     Int
+  recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@index([ingredientId])
 }
 
 model Favorite {

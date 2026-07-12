@@ -18,10 +18,16 @@ export function RecipeBrowser({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return recipes.filter((r) => {
+      // Matches either direction so "red peppers" (plural) still finds an
+      // ingredient named "red pepper" (singular), and vice versa.
+      const matchesIngredient = r.ingredientNames.some(
+        (name) => name.includes(q) || q.includes(name)
+      );
       const matchesQuery =
         q.length === 0 ||
         r.title.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q);
+        r.description.toLowerCase().includes(q) ||
+        matchesIngredient;
       const matchesTag = !activeTag || r.tags.includes(activeTag);
       const matchesTime = !maxTime || r.cookTimeMinutes <= maxTime;
       return matchesQuery && matchesTag && matchesTime;
@@ -35,7 +41,7 @@ export function RecipeBrowser({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search recipes..."
+          placeholder="Search by name or ingredient..."
           className="w-full sm:w-72 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
         />
         <select

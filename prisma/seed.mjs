@@ -9,6 +9,10 @@ const adapter = databaseUrl.startsWith("libsql:")
   : new PrismaBetterSqlite3({ url: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
+// Each ingredient line pairs the exact display text (shown on the recipe
+// page as-is) with a canonical ingredient name (what "what can I cook with
+// X" search actually matches against) - one ingredient per line, so a couple
+// of the original combined lines ("salt and pepper to taste") are split.
 const recipes = [
   {
     slug: "classic-margherita-pizza",
@@ -19,12 +23,12 @@ const recipes = [
     cookTimeMinutes: 25,
     servings: 4,
     ingredients: [
-      "1 pizza dough ball",
-      "1/2 cup crushed San Marzano tomatoes",
-      "8 oz fresh mozzarella, torn",
-      "Fresh basil leaves",
-      "2 tbsp olive oil",
-      "Salt to taste",
+      { text: "1 pizza dough ball", ingredient: "pizza dough" },
+      { text: "1/2 cup crushed San Marzano tomatoes", ingredient: "tomato" },
+      { text: "8 oz fresh mozzarella, torn", ingredient: "mozzarella" },
+      { text: "Fresh basil leaves", ingredient: "basil" },
+      { text: "2 tbsp olive oil", ingredient: "olive oil" },
+      { text: "Salt to taste", ingredient: "salt" },
     ],
     steps: [
       "Preheat oven (with a pizza stone if you have one) to 500°F / 260°C.",
@@ -45,15 +49,15 @@ const recipes = [
     cookTimeMinutes: 30,
     servings: 4,
     ingredients: [
-      "2 cans chickpeas, drained",
-      "1 can coconut milk",
-      "1 can diced tomatoes",
-      "1 onion, diced",
-      "3 cloves garlic, minced",
-      "1 tbsp curry powder",
-      "1 tsp chili flakes",
-      "2 tbsp vegetable oil",
-      "Salt to taste",
+      { text: "2 cans chickpeas, drained", ingredient: "chickpeas" },
+      { text: "1 can coconut milk", ingredient: "coconut milk" },
+      { text: "1 can diced tomatoes", ingredient: "tomato" },
+      { text: "1 onion, diced", ingredient: "onion" },
+      { text: "3 cloves garlic, minced", ingredient: "garlic" },
+      { text: "1 tbsp curry powder", ingredient: "curry powder" },
+      { text: "1 tsp chili flakes", ingredient: "chili flakes" },
+      { text: "2 tbsp vegetable oil", ingredient: "vegetable oil" },
+      { text: "Salt to taste", ingredient: "salt" },
     ],
     steps: [
       "Heat the oil in a large pot and sauté the onion until soft, about 5 minutes.",
@@ -73,15 +77,15 @@ const recipes = [
     cookTimeMinutes: 20,
     servings: 24,
     ingredients: [
-      "2 1/4 cups all-purpose flour",
-      "1 tsp baking soda",
-      "1 tsp salt",
-      "1 cup butter, softened",
-      "3/4 cup granulated sugar",
-      "3/4 cup brown sugar",
-      "2 large eggs",
-      "2 tsp vanilla extract",
-      "2 cups chocolate chips",
+      { text: "2 1/4 cups all-purpose flour", ingredient: "flour" },
+      { text: "1 tsp baking soda", ingredient: "baking soda" },
+      { text: "1 tsp salt", ingredient: "salt" },
+      { text: "1 cup butter, softened", ingredient: "butter" },
+      { text: "3/4 cup granulated sugar", ingredient: "sugar" },
+      { text: "3/4 cup brown sugar", ingredient: "brown sugar" },
+      { text: "2 large eggs", ingredient: "eggs" },
+      { text: "2 tsp vanilla extract", ingredient: "vanilla extract" },
+      { text: "2 cups chocolate chips", ingredient: "chocolate chips" },
     ],
     steps: [
       "Preheat oven to 375°F / 190°C.",
@@ -101,12 +105,13 @@ const recipes = [
     cookTimeMinutes: 10,
     servings: 1,
     ingredients: [
-      "2 slices sourdough bread",
-      "1 ripe avocado",
-      "1/2 lemon, juiced",
-      "Chili flakes",
-      "Salt and pepper to taste",
-      "Olive oil for drizzling",
+      { text: "2 slices sourdough bread", ingredient: "sourdough bread" },
+      { text: "1 ripe avocado", ingredient: "avocado" },
+      { text: "1/2 lemon, juiced", ingredient: "lemon" },
+      { text: "Chili flakes", ingredient: "chili flakes" },
+      { text: "Salt to taste", ingredient: "salt" },
+      { text: "Pepper to taste", ingredient: "pepper" },
+      { text: "Olive oil for drizzling", ingredient: "olive oil" },
     ],
     steps: [
       "Toast the sourdough slices until golden and crisp.",
@@ -124,13 +129,15 @@ const recipes = [
     cookTimeMinutes: 20,
     servings: 4,
     ingredients: [
-      "1 lb ground beef",
-      "8 small corn tortillas",
-      "1 tbsp chili powder",
-      "1 tsp cumin",
-      "1/2 tsp paprika",
-      "1 onion, diced",
-      "Shredded lettuce, diced tomato, shredded cheese for topping",
+      { text: "1 lb ground beef", ingredient: "ground beef" },
+      { text: "8 small corn tortillas", ingredient: "corn tortillas" },
+      { text: "1 tbsp chili powder", ingredient: "chili powder" },
+      { text: "1 tsp cumin", ingredient: "cumin" },
+      { text: "1/2 tsp paprika", ingredient: "paprika" },
+      { text: "1 onion, diced", ingredient: "onion" },
+      { text: "Shredded lettuce for topping", ingredient: "lettuce" },
+      { text: "Diced tomato for topping", ingredient: "tomato" },
+      { text: "Shredded cheese for topping", ingredient: "cheese" },
     ],
     steps: [
       "Cook the diced onion in a pan over medium heat until softened.",
@@ -145,9 +152,17 @@ const recipes = [
 
 async function main() {
   for (const recipe of recipes) {
-    await prisma.recipe.upsert({
+    const created = await prisma.recipe.upsert({
       where: { slug: recipe.slug },
-      update: {},
+      update: {
+        title: recipe.title,
+        description: recipe.description,
+        imageEmoji: recipe.imageEmoji,
+        cookTimeMinutes: recipe.cookTimeMinutes,
+        servings: recipe.servings,
+        steps: JSON.stringify(recipe.steps),
+        tags: JSON.stringify(recipe.tags),
+      },
       create: {
         slug: recipe.slug,
         title: recipe.title,
@@ -155,11 +170,31 @@ async function main() {
         imageEmoji: recipe.imageEmoji,
         cookTimeMinutes: recipe.cookTimeMinutes,
         servings: recipe.servings,
-        ingredients: JSON.stringify(recipe.ingredients),
         steps: JSON.stringify(recipe.steps),
         tags: JSON.stringify(recipe.tags),
       },
     });
+
+    // Re-link ingredients fresh each run rather than trying to diff them -
+    // simplest way to keep a hand-authored seed script idempotent.
+    await prisma.recipeIngredient.deleteMany({ where: { recipeId: created.id } });
+
+    for (let i = 0; i < recipe.ingredients.length; i++) {
+      const { text, ingredient } = recipe.ingredients[i];
+      const ingredientRow = await prisma.ingredient.upsert({
+        where: { name: ingredient },
+        update: {},
+        create: { name: ingredient },
+      });
+      await prisma.recipeIngredient.create({
+        data: {
+          recipeId: created.id,
+          ingredientId: ingredientRow.id,
+          displayText: text,
+          position: i,
+        },
+      });
+    }
   }
   console.log(`Seeded ${recipes.length} recipes.`);
 }

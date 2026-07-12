@@ -10,6 +10,9 @@ export type RecipeSummary = {
   cookTimeMinutes: number;
   servings: number;
   tags: string[];
+  // Canonical ingredient names (e.g. "red pepper") - what ingredient-based
+  // search matches against, separate from the display text shown on the page.
+  ingredientNames: string[];
 };
 
 export type RecipeDetail = RecipeSummary & {
@@ -17,13 +20,14 @@ export type RecipeDetail = RecipeSummary & {
   steps: string[];
 };
 
-function parseTags(raw: string): string[] {
+function parseJsonArray(raw: string): string[] {
   return JSON.parse(raw) as string[];
 }
 
 export async function getAllRecipes(): Promise<RecipeSummary[]> {
   const recipes = await prisma.recipe.findMany({
     orderBy: { title: "asc" },
+    include: { recipeIngredients: { include: { ingredient: true } } },
   });
   return recipes.map((r) => ({
     id: r.id,
@@ -33,12 +37,21 @@ export async function getAllRecipes(): Promise<RecipeSummary[]> {
     imageEmoji: r.imageEmoji,
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
-    tags: parseTags(r.tags),
+    tags: parseJsonArray(r.tags),
+    ingredientNames: r.recipeIngredients.map((ri) => ri.ingredient.name),
   }));
 }
 
 export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null> {
-  const r = await prisma.recipe.findUnique({ where: { slug } });
+  const r = await prisma.recipe.findUnique({
+    where: { slug },
+    include: {
+      recipeIngredients: {
+        include: { ingredient: true },
+        orderBy: { position: "asc" },
+      },
+    },
+  });
   if (!r) return null;
   return {
     id: r.id,
@@ -48,9 +61,10 @@ export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null
     imageEmoji: r.imageEmoji,
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
-    ingredients: parseTags(r.ingredients),
-    steps: parseTags(r.steps),
-    tags: parseTags(r.tags),
+    ingredients: r.recipeIngredients.map((ri) => ri.displayText),
+    ingredientNames: r.recipeIngredients.map((ri) => ri.ingredient.name),
+    steps: parseJsonArray(r.steps),
+    tags: parseJsonArray(r.tags),
   };
 }
 
@@ -58,7 +72,15 @@ export async function getAllTags(): Promise<string[]> {
   const recipes = await prisma.recipe.findMany({ select: { tags: true } });
   const tagSet = new Set<string>();
   for (const r of recipes) {
-    for (const tag of parseTags(r.tags)) tagSet.add(tag);
+    for (const tag of parseJsonArray(r.tags)) tagSet.add(tag);
   }
   return Array.from(tagSet).sort();
+}
+
+export async function getAllIngredientNames(): Promise<string[]> {
+  const ingredients = await prisma.ingredient.findMany({
+    select: { name: true },
+    orderBy: { name: "asc" },
+  });
+  return ingredients.map((i) => i.name);
 }

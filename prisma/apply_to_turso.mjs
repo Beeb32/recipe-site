@@ -12,7 +12,12 @@ if (!url || !authToken) {
 
 const client = createClient({ url, authToken });
 
-const rawSql = readFileSync("prisma/migrations/20260712153823_init/migration.sql", "utf-8");
+const migrationDir = process.argv[2];
+if (!migrationDir) {
+  throw new Error("Usage: node prisma/apply_to_turso.mjs <migration-folder-name>");
+}
+
+const rawSql = readFileSync(`prisma/migrations/${migrationDir}/migration.sql`, "utf-8");
 const withoutComments = rawSql
   .split("\n")
   .filter((line) => !line.trim().startsWith("--"))
