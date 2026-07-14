@@ -43,6 +43,12 @@ export function RecipeBrowser({
     return best;
   }
 
+  const hasActiveFilters =
+    nameQuery.trim().length > 0 ||
+    ingredientQuery.trim().length > 0 ||
+    activeTag !== null ||
+    maxTime !== null;
+
   const filtered = useMemo(() => {
     const nameQ = nameQuery.trim().toLowerCase();
     const ingredientQ = ingredientQuery.trim().toLowerCase();
@@ -72,6 +78,16 @@ export function RecipeBrowser({
     }
     return matches;
   }, [recipes, nameQuery, ingredientQuery, activeTag, maxTime]);
+
+  // With no search/filter active, the homepage would otherwise render every
+  // recipe at once (400+ and growing), which is a heavy, unfocused first
+  // view. Defaulting to the most recently added 20 keeps the page light and
+  // surfaces what's new; any active filter searches the full catalog instead.
+  const newestFirst = useMemo(
+    () => [...recipes].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    [recipes],
+  );
+  const displayed = hasActiveFilters ? filtered : newestFirst.slice(0, 20);
 
   return (
     <div>
@@ -130,11 +146,15 @@ export function RecipeBrowser({
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {!hasActiveFilters && (
+        <h2 className="text-lg font-semibold tracking-tight mb-4">🆕 Newly Added</h2>
+      )}
+
+      {displayed.length === 0 ? (
         <p className="text-sm opacity-70">No recipes match your search.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((recipe) => (
+          {displayed.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>

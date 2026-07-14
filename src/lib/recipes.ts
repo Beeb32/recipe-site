@@ -15,6 +15,7 @@ export type RecipeSummary = {
   cookTimeMinutes: number;
   servings: number;
   tags: string[];
+  createdAt: Date;
   // Canonical ingredient names + quantity used (e.g. "red pepper", 2) - what
   // ingredient-based search matches and ranks against, separate from the
   // display text shown on the page.
@@ -44,6 +45,7 @@ export async function getAllRecipes(): Promise<RecipeSummary[]> {
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     tags: parseJsonArray(r.tags),
+    createdAt: r.createdAt,
     ingredientEntries: r.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,
       quantity: ri.quantity,
@@ -70,6 +72,7 @@ export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null
     imageEmoji: r.imageEmoji,
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
+    createdAt: r.createdAt,
     ingredients: r.recipeIngredients.map((ri) => ri.displayText),
     ingredientEntries: r.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,

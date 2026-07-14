@@ -30,6 +30,7 @@ export async function getFavoriteRecipesForUser(userId: string): Promise<RecipeS
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     tags: parseTags(r.tags),
+    createdAt: r.createdAt,
     ingredientEntries: r.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,
       quantity: ri.quantity,
