@@ -5,6 +5,8 @@ import { getCurrentUser } from "@/lib/dal";
 import { isFavorited } from "@/lib/favorites";
 import { toggleFavorite } from "@/app/actions/favorites";
 import { getRatingSummary, getUserRating, getComments } from "@/lib/reviews";
+import { getLocale } from "@/lib/locale";
+import { t, tagLabel } from "@/lib/i18n";
 import { RatingWidget } from "@/components/RatingWidget";
 import { CommentSection } from "@/components/CommentSection";
 
@@ -14,12 +16,14 @@ export default async function RecipePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const recipe = await getRecipeBySlug(slug);
+  const locale = await getLocale();
+  const recipe = await getRecipeBySlug(slug, locale);
 
   if (!recipe) {
     notFound();
   }
 
+  const strings = t(locale);
   const user = await getCurrentUser();
   const [favorited, ratingSummary, userRating, comments] = await Promise.all([
     user ? isFavorited(user.id, recipe.id) : Promise.resolve(false),
@@ -43,12 +47,12 @@ export default async function RecipePage({
                   : "border-black/10 dark:border-white/15 hover:border-black/30 dark:hover:border-white/30"
               }`}
             >
-              {favorited ? "♥ Saved" : "♡ Save"}
+              {favorited ? strings.saved : strings.save}
             </button>
           </form>
         ) : (
           <Link href="/login" className="text-sm underline underline-offset-2 opacity-70 mt-2">
-            Log in to save
+            {strings.logInToSave}
           </Link>
         )}
       </div>
@@ -56,8 +60,8 @@ export default async function RecipePage({
       <p className="opacity-70 mb-4">{recipe.description}</p>
 
       <div className="flex items-center gap-4 text-sm opacity-70 mb-4">
-        <span>⏱ {recipe.cookTimeMinutes} min</span>
-        <span>🍽 {recipe.servings} servings</span>
+        <span>⏱ {recipe.cookTimeMinutes} {strings.min}</span>
+        <span>🍽 {recipe.servings} {strings.servings}</span>
       </div>
 
       <div className="mb-6">
@@ -77,14 +81,14 @@ export default async function RecipePage({
             key={tag}
             className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 text-xs capitalize"
           >
-            {tag}
+            {tagLabel(locale, tag)}
           </span>
         ))}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         <section className="sm:col-span-1">
-          <h2 className="font-semibold mb-3">Ingredients</h2>
+          <h2 className="font-semibold mb-3">{strings.ingredients}</h2>
           <ul className="space-y-2 text-sm">
             {recipe.ingredients.map((item, i) => (
               <li key={i} className="flex gap-2">
@@ -96,7 +100,7 @@ export default async function RecipePage({
         </section>
 
         <section className="sm:col-span-2">
-          <h2 className="font-semibold mb-3">Steps</h2>
+          <h2 className="font-semibold mb-3">{strings.steps}</h2>
           <ol className="space-y-3 text-sm">
             {recipe.steps.map((step, i) => (
               <li key={i} className="flex gap-3">

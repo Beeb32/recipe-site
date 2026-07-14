@@ -1,5 +1,6 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
+import type { Locale } from "@/lib/locale";
 
 export type IngredientEntry = {
   name: string;
@@ -31,54 +32,68 @@ function parseJsonArray(raw: string): string[] {
   return JSON.parse(raw) as string[];
 }
 
-export async function getAllRecipes(): Promise<RecipeSummary[]> {
+// Translation rows only ever exist for non-English locales, so requesting
+// them filtered by "en" naturally returns nothing and every field falls
+// back to the original column - no need to special-case locale === "en".
+export async function getAllRecipes(locale: Locale = "en"): Promise<RecipeSummary[]> {
   const recipes = await prisma.recipe.findMany({
     orderBy: { title: "asc" },
-    include: { recipeIngredients: { include: { ingredient: true } } },
+    include: {
+      recipeIngredients: { include: { ingredient: true } },
+      translations: { where: { locale } },
+    },
   });
-  return recipes.map((r) => ({
-    id: r.id,
-    slug: r.slug,
-    title: r.title,
-    description: r.description,
-    imageEmoji: r.imageEmoji,
-    cookTimeMinutes: r.cookTimeMinutes,
-    servings: r.servings,
-    tags: parseJsonArray(r.tags),
-    createdAt: r.createdAt,
-    ingredientEntries: r.recipeIngredients.map((ri) => ({
-      name: ri.ingredient.name,
-      quantity: ri.quantity,
-    })),
-  }));
+  return recipes.map((r) => {
+    const translation = r.translations[0];
+    return {
+      id: r.id,
+      slug: r.slug,
+      title: translation?.title ?? r.title,
+      description: translation?.description ?? r.description,
+      imageEmoji: r.imageEmoji,
+      cookTimeMinutes: r.cookTimeMinutes,
+      servings: r.servings,
+      tags: parseJsonArray(r.tags),
+      createdAt: r.createdAt,
+      ingredientEntries: r.recipeIngredients.map((ri) => ({
+        name: ri.ingredient.name,
+        quantity: ri.quantity,
+      })),
+    };
+  });
 }
 
-export async function getRecipeBySlug(slug: string): Promise<RecipeDetail | null> {
+export async function getRecipeBySlug(slug: string, locale: Locale = "en"): Promise<RecipeDetail | null> {
   const r = await prisma.recipe.findUnique({
     where: { slug },
     include: {
       recipeIngredients: {
-        include: { ingredient: true },
+        include: {
+          ingredient: true,
+          translations: { where: { locale } },
+        },
         orderBy: { position: "asc" },
       },
+      translations: { where: { locale } },
     },
   });
   if (!r) return null;
+  const translation = r.translations[0];
   return {
     id: r.id,
     slug: r.slug,
-    title: r.title,
-    description: r.description,
+    title: translation?.title ?? r.title,
+    description: translation?.description ?? r.description,
     imageEmoji: r.imageEmoji,
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     createdAt: r.createdAt,
-    ingredients: r.recipeIngredients.map((ri) => ri.displayText),
+    ingredients: r.recipeIngredients.map((ri) => ri.translations[0]?.displayText ?? ri.displayText),
     ingredientEntries: r.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,
       quantity: ri.quantity,
     })),
-    steps: parseJsonArray(r.steps),
+    steps: translation?.steps ? parseJsonArray(translation.steps) : parseJsonArray(r.steps),
     tags: parseJsonArray(r.tags),
   };
 }

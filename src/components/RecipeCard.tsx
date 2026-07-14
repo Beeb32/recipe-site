@@ -1,7 +1,10 @@
 import Link from "next/link";
 import type { RecipeSummary } from "@/lib/recipes";
+import type { Locale } from "@/lib/locale";
+import { t } from "@/lib/i18n";
 
-export function RecipeCard({ recipe }: { recipe: RecipeSummary }) {
+export function RecipeCard({ recipe, locale = "en" }: { recipe: RecipeSummary; locale?: Locale }) {
+  const strings = t(locale);
   return (
     <Link
       href={`/recipes/${recipe.slug}`}
@@ -11,8 +14,8 @@ export function RecipeCard({ recipe }: { recipe: RecipeSummary }) {
       <h3 className="font-semibold mb-1 group-hover:underline">{recipe.title}</h3>
       <p className="text-sm opacity-70 mb-3 line-clamp-2">{recipe.description}</p>
       <div className="flex items-center gap-3 text-xs opacity-60">
-        <span>⏱ {recipe.cookTimeMinutes} min</span>
-        <span>🍽 {recipe.servings} servings</span>
+        <span>⏱ {recipe.cookTimeMinutes} {strings.min}</span>
+        <span>🍽 {recipe.servings} {strings.servings}</span>
       </div>
     </Link>
   );

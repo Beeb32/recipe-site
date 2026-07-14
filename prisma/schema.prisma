@@ -36,6 +36,23 @@ model Recipe {
   ratings           Rating[]
   comments          Comment[]
   recipeIngredients RecipeIngredient[]
+  translations      RecipeTranslation[]
+}
+
+// Translated title/description/steps for one recipe in one language (e.g.
+// locale "bg" for Bulgarian). Recipes without a row here for the requested
+// locale fall back to the original English fields - translation coverage
+// can grow incrementally without breaking untranslated recipes.
+model RecipeTranslation {
+  id          String @id @default(cuid())
+  recipeId    String
+  locale      String
+  title       String
+  description String
+  steps       String // JSON array, same shape as Recipe.steps
+  recipe      Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeId, locale])
 }
 
 // Canonical ingredient name (e.g. "red pepper", "ground beef") - shared
@@ -64,8 +81,22 @@ model RecipeIngredient {
   position     Int
   recipe       Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  translations RecipeIngredientTranslation[]
 
   @@index([ingredientId])
+}
+
+// Translated displayText for one ingredient line in one language. Search
+// still matches against the canonical (English) Ingredient.name regardless
+// of locale - only what's shown on the page is translated.
+model RecipeIngredientTranslation {
+  id                 String           @id @default(cuid())
+  recipeIngredientId String
+  locale             String
+  displayText        String
+  recipeIngredient   RecipeIngredient @relation(fields: [recipeIngredientId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeIngredientId, locale])
 }
 
 model Favorite {

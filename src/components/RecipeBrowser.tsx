@@ -2,15 +2,20 @@
 
 import { useMemo, useState } from "react";
 import type { RecipeSummary } from "@/lib/recipes";
+import type { Locale } from "@/lib/locale";
+import { t, tagLabel } from "@/lib/i18n";
 import { RecipeCard } from "@/components/RecipeCard";
 
 export function RecipeBrowser({
   recipes,
   allTags,
+  locale,
 }: {
   recipes: RecipeSummary[];
   allTags: string[];
+  locale: Locale;
 }) {
+  const strings = t(locale);
   const [nameQuery, setNameQuery] = useState("");
   const [ingredientQuery, setIngredientQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -97,14 +102,14 @@ export function RecipeBrowser({
             type="text"
             value={nameQuery}
             onChange={(e) => setNameQuery(e.target.value)}
-            placeholder="Search by recipe name..."
+            placeholder={strings.searchByName}
             className="w-full sm:w-64 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
           />
           <input
             type="text"
             value={ingredientQuery}
             onChange={(e) => setIngredientQuery(e.target.value)}
-            placeholder="Search by ingredient..."
+            placeholder={strings.searchByIngredient}
             className="w-full sm:w-64 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/30 dark:focus:border-white/30"
           />
         </div>
@@ -113,10 +118,10 @@ export function RecipeBrowser({
           onChange={(e) => setMaxTime(e.target.value ? Number(e.target.value) : null)}
           className="rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm outline-none"
         >
-          <option value="">Any cook time</option>
-          <option value="15">15 min or less</option>
-          <option value="30">30 min or less</option>
-          <option value="60">1 hour or less</option>
+          <option value="">{strings.anyCookTime}</option>
+          <option value="15">{strings.fifteenMinOrLess}</option>
+          <option value="30">{strings.thirtyMinOrLess}</option>
+          <option value="60">{strings.oneHourOrLess}</option>
         </select>
       </div>
 
@@ -129,7 +134,7 @@ export function RecipeBrowser({
               : "border-black/10 dark:border-white/15 hover:border-black/30 dark:hover:border-white/30"
           }`}
         >
-          All
+          {strings.allTag}
         </button>
         {allTags.map((tag) => (
           <button
@@ -141,21 +146,21 @@ export function RecipeBrowser({
                 : "border-black/10 dark:border-white/15 hover:border-black/30 dark:hover:border-white/30"
             }`}
           >
-            {tag}
+            {tagLabel(locale, tag)}
           </button>
         ))}
       </div>
 
       {!hasActiveFilters && (
-        <h2 className="text-lg font-semibold tracking-tight mb-4">🆕 Newly Added</h2>
+        <h2 className="text-lg font-semibold tracking-tight mb-4">{strings.newlyAdded}</h2>
       )}
 
       {displayed.length === 0 ? (
-        <p className="text-sm opacity-70">No recipes match your search.</p>
+        <p className="text-sm opacity-70">{strings.noRecipesMatch}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {displayed.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={recipe} locale={locale} />
           ))}
         </div>
       )}
