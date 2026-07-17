@@ -1,0 +1,186 @@
+import { applyRecipeUpdates } from "./update-lib.mjs";
+
+const updates = [
+  {
+    en: {
+      slug: "al-pastor-tacos",
+      title: "Al Pastor Tacos",
+      description:
+        "Thin-sliced pork marinated overnight in a red guajillo-achiote adobo with pineapple juice, seared in thin layers to mimic the caramelized crust of a trompo spit.",
+      imageEmoji: "🌮",
+      cookTimeMinutes: 60,
+      servings: 4,
+      ingredients: [
+        { text: "1 1/2 lb pork shoulder, sliced very thin", ingredient: "pork shoulder", quantity: 1.5 },
+        { text: "3 dried guajillo chiles, stemmed and seeded", ingredient: "guajillo chiles", quantity: 3 },
+        { text: "1 dried ancho chile, stemmed and seeded", ingredient: "ancho chile", quantity: 1 },
+        { text: "2 tbsp achiote paste", ingredient: "achiote paste", quantity: 2 },
+        { text: "1/4 cup pineapple juice", ingredient: "pineapple juice", quantity: 0.25 },
+        { text: "2 tbsp vinegar", ingredient: "vinegar", quantity: 2 },
+        { text: "3 cloves garlic", ingredient: "garlic", quantity: 3 },
+        { text: "1/2 tsp cumin", ingredient: "cumin", quantity: 0.5 },
+        { text: "1/2 tsp dried oregano", ingredient: "oregano", quantity: 0.5 },
+        { text: "Salt to taste", ingredient: "salt", quantity: null },
+        { text: "1 cup pineapple chunks", ingredient: "pineapple", quantity: 1 },
+        { text: "8 small corn tortillas", ingredient: "corn tortillas", quantity: 8 },
+        { text: "1/4 cup diced onion", ingredient: "onion", quantity: 0.25 },
+        { text: "1/4 cup fresh cilantro", ingredient: "cilantro", quantity: 0.25 },
+      ],
+      steps: [
+        "Toast the guajillo and ancho chiles briefly in a dry pan, then soak in hot water for 15 minutes until softened.",
+        "Blend the softened chiles with the achiote paste, pineapple juice, vinegar, garlic, cumin, oregano, and salt into a smooth marinade.",
+        "Coat the thin pork slices in the marinade and refrigerate for at least 4 hours, ideally overnight.",
+        "Cook the pork in thin layers in a very hot skillet or griddle, without crowding the pan, so it sears and caramelizes rather than steams, about 2-3 minutes per batch.",
+        "Sear the pineapple chunks in the same pan until caramelized, then fill warm tortillas with the pork, pineapple, onion, and cilantro.",
+      ],
+      tags: ["dinner", "mexican"],
+    },
+    bg: {
+      title: "Тако Ал Пастор",
+      description:
+        "Тънко нарязано свинско, маринована през нощта в червен адобо от гуахильо чушки и ачоте с ананасов сок, запържено на тънки пластове, за да имитира карамелизираната коричка от шишче трампо.",
+      steps: [
+        "Препечете за кратко гуахильо и анчо чушките в сух тиган, после ги накиснете в гореща вода 15 минути до омекване.",
+        "Пасирайте омекналите чушки с пастата ачоте, ананасовия сок, оцета, чесъна, кимиона, ригана и сол до гладка марината.",
+        "Овалайте тънките резени свинско в маринатата и охладете поне 4 часа, в идеалния случай през нощта.",
+        "Изпечете свинското на тънки пластове в много горещ тиган или скара, без да претрупвате тигана, за да се запържи и карамелизира, а не да се задуши, около 2-3 минути на партида.",
+        "Запържете парченцата ананас в същия тиган до карамелизиране, после напълнете топли тортили със свинско, ананас, лук и кориандър.",
+      ],
+      ingredients: [
+        "700 г свинска плешка, нарязана много тънко",
+        "3 сушени гуахильо чушки, без дръжки и семки",
+        "1 сушена анчо чушка, без дръжка и семки",
+        "2 с.л. паста ачоте",
+        "1/4 чаша ананасов сок",
+        "2 с.л. оцет",
+        "3 скилидки чесън",
+        "1/2 ч.л. кимион",
+        "1/2 ч.л. сушен риган",
+        "Сол на вкус",
+        "1 чаша парченца ананас",
+        "8 малки царевични тортили",
+        "1/4 чаша нарязан на кубчета лук",
+        "1/4 чаша пресен кориандър",
+      ],
+    },
+  },
+  {
+    en: {
+      slug: "carnitas-tacos",
+      title: "Carnitas Tacos",
+      description:
+        "Pork shoulder slow-braised in lard, milk, and orange juice until fall-apart tender - the milk solids browning are what give real carnitas their signature golden crust when crisped.",
+      imageEmoji: "🌮",
+      cookTimeMinutes: 500,
+      servings: 6,
+      ingredients: [
+        { text: "3 lb pork shoulder, cut into large chunks", ingredient: "pork shoulder", quantity: 3 },
+        { text: "1/4 cup lard (or vegetable oil)", ingredient: "lard", quantity: 0.25 },
+        { text: "1 onion, quartered", ingredient: "onion", quantity: 1 },
+        { text: "4 cloves garlic", ingredient: "garlic", quantity: 4 },
+        { text: "1 orange, juiced (peel reserved)", ingredient: "orange", quantity: 1 },
+        { text: "1/2 cup milk", ingredient: "milk", quantity: 0.5 },
+        { text: "2 tsp cumin", ingredient: "cumin", quantity: 2 },
+        { text: "1 tsp dried oregano", ingredient: "oregano", quantity: 1 },
+        { text: "2 bay leaves", ingredient: "bay leaf", quantity: 2 },
+        { text: "Salt to taste", ingredient: "salt", quantity: null },
+        { text: "12 corn tortillas", ingredient: "corn tortillas", quantity: 12 },
+      ],
+      steps: [
+        "Place the pork, lard, onion, garlic, orange juice and peel, milk, cumin, oregano, bay leaves, and salt in a slow cooker.",
+        "Cook on low for 8 hours until the pork shreds easily and most of the liquid has cooked away.",
+        "Discard the orange peel and bay leaves, then shred the pork in the remaining fat and crisp it up under the broiler or in a hot skillet until the edges turn golden and caramelized.",
+        "Serve in warmed tortillas with your favorite toppings.",
+      ],
+      tags: ["dinner", "mexican"],
+    },
+    bg: {
+      title: "Тако Карнитас",
+      description:
+        "Свинско плешка, бавно задушена в свинска мас, мляко и портокалов сок до пълно омекване - разграждащите се млечни белтъчини от млякото са това, което придава на истинските карнитас характерната им златиста коричка при запичане.",
+      steps: [
+        "Поставете свинското, свинската мас, лука, чесъна, портокаловия сок и обелките, млякото, кимиона, ригана, дафиновите листа и солта в бавна готварска печка.",
+        "Гответе на слаб режим 8 часа, докато месото се накъсва лесно и по-голямата част от течността се изпари.",
+        "Изхвърлете портокаловите обелки и дафиновите листа, после накъсайте месото в оставащата мазнина и го запечете до хрупкавост на грил или в горещ тиган, докато краищата станат златисти и карамелизирани.",
+        "Сервирайте в затоплени тортили с любимите ви гарнитури.",
+      ],
+      ingredients: [
+        "1.4 кг свинско месо (плешка), нарязано на едри парчета",
+        "1/4 чаша свинска мас (или олио)",
+        "1 лук, нарязан на четвъртинки",
+        "4 скилидки чесън",
+        "сок от 1 портокал (обелките запазени)",
+        "1/2 чаша мляко",
+        "2 ч.л. кимион",
+        "1 ч.л. сушен риган",
+        "2 дафинови листа",
+        "Сол на вкус",
+        "12 царевични тортили",
+      ],
+    },
+  },
+  {
+    en: {
+      slug: "chilaquiles",
+      title: "Chilaquiles",
+      description:
+        "Crispy fried tortilla wedges simmered in a charred tomato-chile salsa roja until just softened, topped with a fried egg, cotija, and crema - a Mexican breakfast classic.",
+      imageEmoji: "🌶️",
+      cookTimeMinutes: 35,
+      servings: 4,
+      ingredients: [
+        { text: "8 corn tortillas, cut into wedges (day-old if possible)", ingredient: "corn tortillas", quantity: 8 },
+        { text: "2 tbsp vegetable oil (for frying tortillas)", ingredient: "vegetable oil", quantity: 2 },
+        { text: "4 tomatoes", ingredient: "tomato", quantity: 4 },
+        { text: "2 dried guajillo chiles, stemmed and seeded", ingredient: "guajillo chiles", quantity: 2 },
+        { text: "2 cloves garlic", ingredient: "garlic", quantity: 2 },
+        { text: "1/4 onion", ingredient: "onion", quantity: 0.25 },
+        { text: "Salt to taste", ingredient: "salt", quantity: null },
+        { text: "1 tbsp vegetable oil (for the salsa)", ingredient: "vegetable oil", quantity: 1 },
+        { text: "4 eggs", ingredient: "eggs", quantity: 4 },
+        { text: "1/2 cup crumbled cotija cheese", ingredient: "cotija cheese", quantity: 0.5 },
+        { text: "1/4 cup Mexican crema", ingredient: "crema", quantity: 0.25 },
+        { text: "1/2 avocado, sliced", ingredient: "avocado", quantity: 0.5 },
+      ],
+      steps: [
+        "Fry the tortilla wedges in oil until crisp, or use store-bought tortilla chips.",
+        "Broil the tomatoes, guajillo chiles, garlic, and onion until charred and blistered, about 8-10 minutes, then blend into a smooth salsa.",
+        "Heat oil in a large skillet, add the salsa, and cook until slightly thickened; season with salt.",
+        "Toss the crispy tortillas in the hot salsa until coated but still slightly crisp.",
+        "Fry the eggs separately to your liking, then top the chilaquiles with a fried egg, cotija, crema, and avocado.",
+      ],
+      tags: ["breakfast", "mexican", "quick"],
+    },
+    bg: {
+      title: "Чилакилес",
+      description:
+        "Хрупкави пържени резенчета тортила, задушени в опечена доматено-чили салса роха до леко омекване, покрити с пържено яйце, котиха и крема - мексиканска класика за закуска.",
+      steps: [
+        "Изпържете резенчетата тортила в олио до хрупкавост, или използвайте готов царевичен чипс.",
+        "Изпечете доматите, гуахильо чушките, чесъна и лука на грил, докато се овъглят и мехурясат, около 8-10 минути, после пасирайте до гладка салса.",
+        "Загрейте олио в голям тиган, добавете салсата и гответе до леко сгъстяване; подправете със сол.",
+        "Разбъркайте хрупкавите тортили в горещата салса до покриване, но все още леко хрупкави.",
+        "Изпържете яйцата отделно според предпочитанията си, после отгоре на чилакилес сложете пържено яйце, котиха, крема и авокадо.",
+      ],
+      ingredients: [
+        "8 царевични тортили, нарязани на резенчета (по-добре престояли)",
+        "2 с.л. олио (за пържене на тортилите)",
+        "4 домата",
+        "2 сушени гуахильо чушки, без дръжки и семки",
+        "2 скилидки чесън",
+        "1/4 лук",
+        "Сол на вкус",
+        "1 с.л. олио (за салсата)",
+        "4 яйца",
+        "1/2 чаша натрошено сирене котиха",
+        "1/4 чаша мексиканска крема",
+        "1/2 авокадо, нарязано на резени",
+      ],
+    },
+  },
+];
+
+applyRecipeUpdates(updates).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
