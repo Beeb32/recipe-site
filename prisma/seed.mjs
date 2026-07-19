@@ -2758,7 +2758,8 @@ const recipes = [
   {
     slug: "snickerdoodles",
     title: "Snickerdoodles",
-    description: "Soft, chewy sugar cookies rolled in cinnamon sugar before baking.",
+    description:
+      "Soft, chewy sugar cookies rolled in cinnamon sugar - the cream of tartar paired with baking soda is what gives real snickerdoodles their signature tangy edge and tender crumb, not just cinnamon on a plain sugar cookie.",
     imageEmoji: "🍪",
     cookTimeMinutes: 25,
     servings: 24,
@@ -4920,21 +4921,24 @@ const recipes = [
   {
     slug: "hot-chocolate",
     title: "Hot Chocolate",
-    description: "Rich, creamy hot chocolate made on the stovetop with cocoa and milk.",
+    description:
+      "Rich, creamy hot chocolate made with real melted chocolate alongside cocoa powder for the cocoa-butter richness that cocoa powder alone can't give, heated gently without ever boiling - boiling is what makes chocolate separate and turn grainy.",
     imageEmoji: "☕",
     cookTimeMinutes: 10,
     servings: 2,
     ingredients: [
       { text: "2 cups milk", ingredient: "milk", quantity: 2 },
-      { text: "3 tbsp cocoa powder", ingredient: "cocoa powder", quantity: 3 },
-      { text: "3 tbsp sugar", ingredient: "sugar", quantity: 3 },
+      { text: "2 oz semi-sweet chocolate, chopped", ingredient: "chocolate", quantity: 2 },
+      { text: "2 tbsp cocoa powder", ingredient: "cocoa powder", quantity: 2 },
+      { text: "2 tbsp sugar", ingredient: "sugar", quantity: 2 },
       { text: "1/2 tsp vanilla extract", ingredient: "vanilla extract", quantity: 0.5 },
+      { text: "Pinch of salt", ingredient: "salt", quantity: null },
     ],
     steps: [
       "Whisk the cocoa powder and sugar with a splash of milk in a saucepan until smooth.",
-      "Gradually whisk in the remaining milk.",
-      "Heat over medium-low heat, stirring often, until hot but not boiling.",
-      "Stir in the vanilla before serving.",
+      "Gradually whisk in the remaining milk, then add the chopped chocolate.",
+      "Heat over medium-low heat, whisking often, until the chocolate is fully melted and the mixture is hot but not boiling - boiling is what makes chocolate separate and turn grainy.",
+      "Stir in the vanilla and a pinch of salt before serving.",
     ],
     tags: ["snack", "vegetarian", "quick"],
   },
