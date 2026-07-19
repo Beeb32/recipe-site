@@ -6658,7 +6658,8 @@ const recipes = [
   {
     slug: "grilled-steak",
     title: "Grilled Steak",
-    description: "A simply seasoned steak grilled to a perfect crust and juicy center.",
+    description:
+      "A simply seasoned steak grilled to a perfect crust and juicy center - salting well ahead of time, rather than right before grilling, is what lets the seasoning penetrate the meat and gives the sear a better crust.",
     imageEmoji: "🥩",
     cookTimeMinutes: 20,
     servings: 4,
@@ -6669,10 +6670,11 @@ const recipes = [
       { text: "Pepper to taste", ingredient: "pepper", quantity: null },
     ],
     steps: [
-      "Rub the steaks with olive oil, salt, and pepper.",
+      "Season the steaks generously with salt at least 40 minutes before grilling (or up to overnight, uncovered in the fridge) - salting ahead of time lets it penetrate the meat instead of just sitting on the surface.",
+      "Pat the steaks dry and rub with olive oil and pepper just before grilling.",
       "Preheat the grill to high heat.",
       "Grill for 4-5 minutes per side for medium-rare.",
-      "Rest for 5 minutes before serving.",
+      "Rest for 5-10 minutes before slicing - cutting in too soon lets the juices run out onto the plate instead of redistributing through the meat.",
     ],
     tags: ["dinner", "quick"],
   },
@@ -6958,7 +6960,8 @@ const recipes = [
   {
     slug: "green-bean-casserole",
     title: "Green Bean Casserole",
-    description: "Tender green beans baked in a creamy mushroom sauce, topped with crispy fried onions.",
+    description:
+      "Tender green beans baked in a creamy mushroom sauce with soy sauce and black pepper, topped with crispy fried onions - this is Dorcas Reilly's original 1955 recipe developed at Campbell's, and soy sauce is the ingredient most modern versions leave out even though it was there from the start.",
     imageEmoji: "🥘",
     cookTimeMinutes: 40,
     servings: 8,
@@ -6966,11 +6969,13 @@ const recipes = [
       { text: "4 cups green beans", ingredient: "green beans", quantity: 4 },
       { text: "2 cans cream of mushroom soup", ingredient: "cream of mushroom soup", quantity: 2 },
       { text: "1 cup milk", ingredient: "milk", quantity: 1 },
+      { text: "1 tbsp soy sauce", ingredient: "soy sauce", quantity: 1 },
+      { text: "1/4 tsp black pepper", ingredient: "black pepper", quantity: 0.25 },
       { text: "1 1/3 cups crispy fried onions", ingredient: "fried onions", quantity: 1.33 },
     ],
     steps: [
       "Preheat oven to 350°F.",
-      "Mix the green beans, cream of mushroom soup, and milk in a baking dish.",
+      "Mix the green beans, cream of mushroom soup, milk, soy sauce, and black pepper in a baking dish.",
       "Bake for 25 minutes.",
       "Top with fried onions and bake for another 5 minutes until golden.",
     ],
