@@ -1265,7 +1265,8 @@ const recipes = [
   {
     slug: "fudgy-brownies",
     title: "Fudgy Brownies",
-    description: "Rich, dense chocolate brownies with a shiny crackled top.",
+    description:
+      "Rich, dense chocolate brownies with a shiny, crackled top - whisking the sugar into the hot melted butter, then beating in the eggs vigorously, is what dissolves the sugar enough to rise to the surface and form that signature crackly crust, and pulling them while the center still looks slightly underbaked is what keeps them fudgy instead of dry.",
     imageEmoji: "🍫",
     cookTimeMinutes: 40,
     servings: 9,
@@ -1279,9 +1280,10 @@ const recipes = [
     ],
     steps: [
       "Preheat oven to 350°F and grease a baking pan.",
-      "Melt the butter, then whisk in the sugar, eggs, and vanilla.",
+      "Melt the butter, then whisk in the sugar while it's still hot until mostly dissolved - this is what helps the sugar rise to the surface for a shiny, crackly top.",
+      "Whisk in the eggs and vanilla vigorously until well combined.",
       "Stir in the cocoa powder and flour until just combined.",
-      "Pour into the pan and bake for 25-30 minutes until the center is just set.",
+      "Pour into the pan and bake for 25-30 minutes until the edges are set but the center still looks slightly underbaked - brownies firm up as they cool, so overbaking here is what dries them out.",
       "Cool completely before cutting into squares.",
     ],
     tags: ["dessert", "baking", "vegetarian"],
@@ -3204,20 +3206,25 @@ const recipes = [
   {
     slug: "egg-salad-sandwich",
     title: "Egg Salad Sandwich",
-    description: "Chopped hard-boiled eggs mixed with mayonnaise and mustard, piled on bread.",
+    description:
+      "Chopped hard-boiled eggs, cooked gently and shocked in ice water to keep the yolks bright yellow, mixed with mayonnaise, mustard, and crunchy diced celery, piled on bread - the ice bath is what keeps the yolks from developing a grey-green ring, and the celery is the crunch most bare-bones versions skip.",
     imageEmoji: "🥪",
     cookTimeMinutes: 15,
     servings: 2,
     ingredients: [
-      { text: "6 eggs, hard-boiled and chopped", ingredient: "eggs", quantity: 6 },
+      { text: "6 eggs", ingredient: "eggs", quantity: 6 },
       { text: "1/3 cup mayonnaise", ingredient: "mayonnaise", quantity: 0.33 },
       { text: "1 tsp mustard", ingredient: "mustard", quantity: 1 },
+      { text: "1 celery stalk, finely diced", ingredient: "celery", quantity: 1 },
+      { text: "1 tbsp chopped fresh chives", ingredient: "chives", quantity: 1 },
       { text: "4 slices bread", ingredient: "bread", quantity: 4 },
-      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Salt and pepper to taste", ingredient: "salt and pepper", quantity: null },
     ],
     steps: [
-      "Mix the chopped eggs with mayonnaise and mustard.",
-      "Season with salt to taste.",
+      "Place the eggs in a saucepan, cover with water, and bring to a boil, then remove from heat, cover, and let sit for 10-12 minutes.",
+      "Transfer the eggs immediately to an ice bath for at least 5 minutes - shocking them in ice water is what keeps the yolks bright yellow instead of developing a grey-green ring.",
+      "Peel and chop the cooled eggs, then mix with mayonnaise, mustard, celery, and chives.",
+      "Season with salt and pepper to taste.",
       "Spread onto bread slices and top with the remaining bread.",
     ],
     tags: ["lunch", "quick", "vegetarian"],
