@@ -1203,12 +1203,13 @@ const recipes = [
   {
     slug: "banana-bread",
     title: "Banana Bread",
-    description: "A moist, sweet quick bread made from ripe, spotty bananas - a classic way to use them up.",
+    description:
+      "A moist, sweet quick bread made from very ripe, heavily speckled bananas - the riper and darker the bananas, the more moisture and flavor they bring, and stirring the batter only until just combined is what keeps the loaf tender instead of dense.",
     imageEmoji: "🍌",
     cookTimeMinutes: 65,
     servings: 8,
     ingredients: [
-      { text: "3 ripe bananas, mashed", ingredient: "banana", quantity: 3 },
+      { text: "3 very ripe bananas (heavily speckled or blackened), mashed", ingredient: "banana", quantity: 3 },
       { text: "1/3 cup melted butter", ingredient: "butter", quantity: 0.33 },
       { text: "3/4 cup sugar", ingredient: "sugar", quantity: 0.75 },
       { text: "1 egg", ingredient: "eggs", quantity: 1 },
@@ -1451,7 +1452,8 @@ const recipes = [
   {
     slug: "hearty-beef-stew",
     title: "Hearty Beef Stew",
-    description: "Tender chunks of beef slow-simmered with potatoes and carrots in a rich broth.",
+    description:
+      "Tender chunks of beef seared in batches until deeply browned, deglazed with red wine to lift all the fond, then slow-simmered with potatoes and carrots in a rich broth - searing in batches instead of crowding the pot, and deglazing with wine, are what build the deep flavor real beef stew is known for.",
     imageEmoji: "🍲",
     cookTimeMinutes: 120,
     servings: 6,
@@ -1461,13 +1463,16 @@ const recipes = [
       { text: "3 carrots, sliced", ingredient: "carrot", quantity: 3 },
       { text: "1 onion, diced", ingredient: "onion", quantity: 1 },
       { text: "3 tbsp flour", ingredient: "flour", quantity: 3 },
+      { text: "1/2 cup dry red wine", ingredient: "red wine", quantity: 0.5 },
       { text: "4 cups beef broth", ingredient: "beef broth", quantity: 4 },
       { text: "2 tbsp tomato paste", ingredient: "tomato paste", quantity: 2 },
     ],
     steps: [
-      "Toss the beef cubes in flour, then brown them in a large pot.",
-      "Add the onion and cook until softened.",
-      "Stir in the tomato paste, then pour in the beef broth.",
+      "Pat the beef cubes dry, then toss in flour.",
+      "Working in batches so the pot isn't crowded, brown the beef deeply on all sides in a large pot, then remove and set aside - crowding the pot steams the meat instead of browning it.",
+      "Add the onion to the same pot and cook until softened, scraping up any browned bits.",
+      "Pour in the red wine and simmer for 1-2 minutes, scraping up the rest of the browned bits from the bottom of the pot - deglazing with wine is what lifts all that flavor into the stew.",
+      "Stir in the tomato paste, then pour in the beef broth and return the beef to the pot.",
       "Add the potatoes and carrots, then simmer, covered, for 1.5-2 hours until the beef is tender.",
       "Season to taste before serving.",
     ],
