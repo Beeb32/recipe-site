@@ -8062,7 +8062,8 @@ const recipes = [
   {
     slug: "stuffed-bell-peppers",
     title: "Stuffed Bell Peppers",
-    description: "Bell peppers filled with a savory mixture of ground beef, rice, and tomato sauce.",
+    description:
+      "Bell peppers parboiled briefly to soften before stuffing with a savory mixture of ground beef, rice, and tomato sauce - parboiling first is what keeps the peppers tender all the way through instead of staying crunchy at the base while the filling is done.",
     imageEmoji: "🫑",
     cookTimeMinutes: 55,
     servings: 4,
@@ -8075,8 +8076,9 @@ const recipes = [
     ],
     steps: [
       "Preheat oven to 375°F.",
+      "Blanch the bell peppers in boiling water for 5 minutes to soften slightly, then drain - parboiling first is what keeps the peppers tender all the way through instead of staying crunchy at the base.",
       "Brown the ground beef, then mix with the cooked rice and half the tomato sauce.",
-      "Stuff the mixture into the bell peppers and place in a baking dish.",
+      "Stuff the mixture into the parboiled bell peppers and place in a baking dish.",
       "Top with remaining sauce and cheese, then bake for 30-35 minutes until the peppers are tender.",
     ],
     tags: ["dinner"],
@@ -9542,20 +9544,26 @@ const recipes = [
   {
     slug: "stuffed-shells",
     title: "Stuffed Shells",
-    description: "Jumbo pasta shells filled with a creamy ricotta mixture, baked in marinara sauce.",
+    description:
+      "Jumbo pasta shells cooked just to al dente so they don't tear, filled with a ricotta mixture properly seasoned with parmesan, garlic, and herbs - seasoning the ricotta filling itself, not just the sauce, is what most bare-bones versions skip, leaving the filling bland.",
     imageEmoji: "🍝",
     cookTimeMinutes: 55,
     servings: 6,
     ingredients: [
-      { text: "20 jumbo pasta shells, cooked", ingredient: "pasta shells", quantity: 20 },
+      { text: "20 jumbo pasta shells, cooked just to al dente", ingredient: "pasta shells", quantity: 20 },
       { text: "2 cups ricotta cheese", ingredient: "ricotta cheese", quantity: 2 },
       { text: "1 egg", ingredient: "eggs", quantity: 1 },
+      { text: "1/2 cup grated parmesan", ingredient: "parmesan", quantity: 0.5 },
+      { text: "1 clove garlic, minced", ingredient: "garlic", quantity: 1 },
+      { text: "1 tsp Italian seasoning", ingredient: "italian seasoning", quantity: 1 },
+      { text: "Salt and pepper to taste", ingredient: "salt and pepper", quantity: null },
       { text: "2 cups marinara sauce", ingredient: "marinara sauce", quantity: 2 },
       { text: "1 1/2 cups shredded mozzarella", ingredient: "mozzarella", quantity: 1.5 },
     ],
     steps: [
       "Preheat oven to 375°F.",
-      "Mix the ricotta cheese with the egg and half the mozzarella.",
+      "Cook the pasta shells just until al dente according to the package, being careful not to overcook them or they'll tear when stuffed.",
+      "Mix the ricotta cheese with the egg, parmesan, garlic, Italian seasoning, salt, pepper, and half the mozzarella - seasoning the filling itself is what keeps it from tasting bland under the sauce.",
       "Spread a layer of marinara in a baking dish, stuff the shells with the ricotta mixture, and arrange on top.",
       "Cover with remaining marinara and mozzarella, then bake for 30 minutes until bubbly.",
     ],
