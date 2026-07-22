@@ -8520,12 +8520,13 @@ const recipes = [
   {
     slug: "vanilla-cake",
     title: "Vanilla Cake",
-    description: "A classic, tender vanilla layer cake perfect for any celebration.",
+    description:
+      "A classic, tender vanilla layer cake made with the reverse creaming method - beating the butter into the dry ingredients first, rather than creaming butter and sugar before adding flour, coats the flour in fat and limits gluten development, which is what gives real bakery-style vanilla cake its velvety, tight crumb instead of an airy, coarse one.",
     imageEmoji: "🍰",
     cookTimeMinutes: 55,
     servings: 12,
     ingredients: [
-      { text: "2 1/2 cups flour", ingredient: "flour", quantity: 2.5 },
+      { text: "2 1/2 cups cake flour", ingredient: "cake flour", quantity: 2.5 },
       { text: "1 3/4 cups sugar", ingredient: "sugar", quantity: 1.75 },
       { text: "1 cup butter, softened", ingredient: "butter", quantity: 1 },
       { text: "4 eggs", ingredient: "eggs", quantity: 4 },
@@ -8533,9 +8534,10 @@ const recipes = [
       { text: "2 tsp vanilla extract", ingredient: "vanilla extract", quantity: 2 },
     ],
     steps: [
-      "Preheat oven to 350°F and grease two round cake pans.",
-      "Cream the butter and sugar, then beat in the eggs and vanilla.",
-      "Alternate mixing in the flour and milk until smooth.",
+      "Preheat oven to 335°F and grease two round cake pans.",
+      "Whisk together the cake flour and sugar, then beat in the softened butter until the mixture looks like coarse, damp sand - coating the flour in butter first is what limits gluten development for a tender, velvety crumb.",
+      "Beat in the eggs one at a time, then the vanilla.",
+      "Gradually mix in the milk until smooth.",
       "Divide between the pans and bake for 28-30 minutes until a toothpick comes out clean.",
     ],
     tags: ["dessert", "vegetarian", "baking"],
@@ -9393,7 +9395,8 @@ const recipes = [
   {
     slug: "jalapeno-poppers",
     title: "Jalapeno Poppers",
-    description: "Jalapeño halves stuffed with creamy cheese and baked until bubbly.",
+    description:
+      "Jalapeño halves stuffed with creamy cheese, then wrapped in bacon and baked until crisp - wrapping the peppers in bacon, rather than just mixing crumbled bacon into the filling, is the classic technique that gives real jalapeño poppers their crispy, smoky shell.",
     imageEmoji: "🌶️",
     cookTimeMinutes: 30,
     servings: 8,
@@ -9401,13 +9404,14 @@ const recipes = [
       { text: "12 jalapeños, halved and seeded", ingredient: "jalapeno", quantity: 12 },
       { text: "8 oz cream cheese, softened", ingredient: "cream cheese", quantity: 8 },
       { text: "1 cup shredded cheddar cheese", ingredient: "cheddar cheese", quantity: 1 },
-      { text: "6 slices bacon, cooked and crumbled", ingredient: "bacon", quantity: 6 },
+      { text: "12 slices thin-cut bacon, halved", ingredient: "bacon", quantity: 12 },
     ],
     steps: [
-      "Preheat oven to 400°F.",
-      "Mix the cream cheese, cheddar, and bacon together.",
+      "Preheat oven to 425°F.",
+      "Mix the cream cheese and cheddar together.",
       "Stuff the mixture into each jalapeño half.",
-      "Bake for 18-20 minutes until the cheese is bubbly and the peppers are tender.",
+      "Wrap each stuffed half in a piece of bacon, securing with a toothpick if needed.",
+      "Bake for 18-20 minutes until the bacon is crisp and the peppers are tender.",
     ],
     tags: ["snack", "quick"],
   },
