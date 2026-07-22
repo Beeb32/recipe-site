@@ -3858,12 +3858,14 @@ const recipes = [
   {
     slug: "loaded-baked-potatoes",
     title: "Loaded Baked Potatoes",
-    description: "Fluffy baked potatoes topped with cheese, bacon, sour cream, and green onion.",
+    description:
+      "Fluffy baked potatoes with skins rubbed in oil for extra crispness, topped with cheese, bacon, sour cream, and green onion - coating the skin in oil before baking is what gives real baked potatoes their crackly crust instead of a soft, dull one.",
     imageEmoji: "🥔",
     cookTimeMinutes: 60,
     servings: 4,
     ingredients: [
       { text: "4 potatoes", ingredient: "potato", quantity: 4 },
+      { text: "2 tbsp olive oil", ingredient: "olive oil", quantity: 2 },
       { text: "1 cup shredded cheddar cheese", ingredient: "cheddar cheese", quantity: 1 },
       { text: "4 slices bacon, cooked and crumbled", ingredient: "bacon", quantity: 4 },
       { text: "1/2 cup sour cream", ingredient: "sour cream", quantity: 0.5 },
@@ -3871,6 +3873,7 @@ const recipes = [
     ],
     steps: [
       "Preheat oven to 400°F and pierce each potato a few times with a fork.",
+      "Rub the potatoes all over with olive oil and a sprinkle of salt - coating the skin in oil is what gives it a crispy, crackly crust instead of staying soft.",
       "Bake directly on the oven rack for 45-50 minutes until tender.",
       "Slice open each potato and fluff the inside with a fork.",
       "Top with cheese, bacon, sour cream, and green onions.",
@@ -7084,21 +7087,28 @@ const recipes = [
   {
     slug: "hashbrown-casserole",
     title: "Hashbrown Casserole",
-    description: "A cheesy, creamy baked casserole of shredded potatoes - a breakfast side favorite.",
+    description:
+      "A cheesy, creamy baked casserole of shredded potatoes topped with buttered cornflakes for crunch - the cornflake topping is the signature finishing touch of the classic 'funeral potatoes' casserole that most quick versions leave off.",
     imageEmoji: "🥔",
     cookTimeMinutes: 55,
     servings: 8,
     ingredients: [
-      { text: "1 bag frozen shredded hash browns, thawed", ingredient: "hash browns", quantity: 1 },
+      { text: "1 bag frozen shredded hash browns, thawed and patted dry", ingredient: "hash browns", quantity: 1 },
       { text: "2 cups shredded cheddar cheese", ingredient: "cheddar cheese", quantity: 2 },
       { text: "1 can cream of chicken soup", ingredient: "cream of chicken soup", quantity: 1 },
       { text: "1 cup sour cream", ingredient: "sour cream", quantity: 1 },
       { text: "1/4 cup melted butter", ingredient: "butter", quantity: 0.25 },
+      { text: "1/2 tsp onion powder", ingredient: "onion powder", quantity: 0.5 },
+      { text: "Salt and pepper to taste", ingredient: "salt and pepper", quantity: null },
+      { text: "2 cups cornflakes, crushed", ingredient: "cornflakes", quantity: 2 },
+      { text: "2 tbsp melted butter (for topping)", ingredient: "butter", quantity: 2 },
     ],
     steps: [
       "Preheat oven to 350°F.",
-      "Mix the hash browns, cheese, cream of chicken soup, sour cream, and melted butter.",
+      "Pat the thawed hash browns dry with paper towels - excess moisture is what makes the casserole watery instead of creamy.",
+      "Mix the hash browns, cheese, cream of chicken soup, sour cream, melted butter, onion powder, salt, and pepper.",
       "Spread into a baking dish.",
+      "Toss the crushed cornflakes with the remaining melted butter and sprinkle over the top - the cornflake topping is the signature crunch of classic 'funeral potatoes.'",
       "Bake for 45 minutes until golden and bubbly.",
     ],
     tags: ["breakfast", "vegetarian"],
