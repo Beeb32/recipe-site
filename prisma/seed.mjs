@@ -2243,7 +2243,8 @@ const recipes = [
   {
     slug: "shrimp-ceviche",
     title: "Shrimp Ceviche",
-    description: "Fresh shrimp cured in lime juice with tomato, onion, and cilantro - light and zesty.",
+    description:
+      "Fresh shrimp cured in lime juice with tomato, onion, and cilantro, seasoned with salt - light and zesty.",
     imageEmoji: "🍤",
     cookTimeMinutes: 30,
     servings: 4,
@@ -2254,11 +2255,12 @@ const recipes = [
       { text: "1/2 red onion, diced", ingredient: "red onion", quantity: 0.5 },
       { text: "1/4 cup chopped cilantro", ingredient: "cilantro", quantity: 0.25 },
       { text: "1 jalapeño, minced", ingredient: "jalapeno", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
     ],
     steps: [
       "Combine the shrimp with lime juice in a bowl, making sure it's fully submerged.",
       "Refrigerate for at least 30 minutes, until the shrimp turns opaque and firm.",
-      "Stir in the tomato, red onion, cilantro, and jalapeño.",
+      "Stir in the tomato, red onion, cilantro, jalapeño, and salt.",
       "Serve chilled with tortilla chips.",
     ],
     tags: ["lunch", "mexican", "quick"],
@@ -3726,7 +3728,8 @@ const recipes = [
   {
     slug: "seven-layer-dip",
     title: "Seven Layer Dip",
-    description: "A crowd-pleasing layered dip of beans, guacamole, sour cream, and cheese.",
+    description:
+      "A crowd-pleasing layered dip of beans, guacamole, sour cream, salsa, cheese, olives, and green onions - seven actual layers, not six passing for seven.",
     imageEmoji: "🥑",
     cookTimeMinutes: 20,
     servings: 8,
@@ -3737,11 +3740,13 @@ const recipes = [
       { text: "1 cup shredded cheddar cheese", ingredient: "cheddar cheese", quantity: 1 },
       { text: "1 cup salsa", ingredient: "salsa", quantity: 1 },
       { text: "1/2 cup sliced black olives", ingredient: "black olives", quantity: 0.5 },
+      { text: "3 green onions, sliced", ingredient: "green onion", quantity: 3 },
     ],
     steps: [
       "Spread the refried beans across the bottom of a serving dish.",
       "Layer the guacamole, then the sour cream, over the beans.",
       "Top with salsa, shredded cheese, and black olives.",
+      "Finish with a scattering of green onions for the seventh layer.",
       "Serve chilled with tortilla chips.",
     ],
     tags: ["snack", "mexican", "vegetarian"],
@@ -3991,7 +3996,8 @@ const recipes = [
   {
     slug: "simple-beef-stir-fry",
     title: "Simple Beef Stir Fry",
-    description: "Quick-cooked beef and vegetables tossed in a savory soy-garlic sauce.",
+    description:
+      "Quick-cooked beef and vegetables tossed in a savory soy-garlic sauce, with the garlic added at the end - garlic burns and turns bitter within seconds over high heat, so it goes in last instead of stir-frying the whole time.",
     imageEmoji: "🥩",
     cookTimeMinutes: 25,
     servings: 4,
@@ -4005,7 +4011,8 @@ const recipes = [
     ],
     steps: [
       "Heat oil in a wok or large skillet and sear the beef until browned; set aside.",
-      "Stir-fry the broccoli, carrot, and garlic for 3-4 minutes until crisp-tender.",
+      "Stir-fry the broccoli and carrot for 3-4 minutes until crisp-tender.",
+      "Add the garlic and cook for 30 seconds until fragrant - garlic burns quickly over high heat, so it goes in last instead of stir-frying the whole time.",
       "Return the beef to the pan with the soy sauce, tossing until well combined and heated through.",
     ],
     tags: ["dinner", "quick", "asian"],
@@ -4139,7 +4146,8 @@ const recipes = [
   {
     slug: "simple-baked-meatballs",
     title: "Simple Baked Meatballs",
-    description: "Tender, oven-baked meatballs in a simple tomato sauce - no frying required.",
+    description:
+      "Tender, oven-baked meatballs seasoned with garlic and oregano in a simple tomato sauce - no frying required.",
     imageEmoji: "🍝",
     cookTimeMinutes: 40,
     servings: 4,
@@ -4147,12 +4155,16 @@ const recipes = [
       { text: "1 lb ground beef", ingredient: "ground beef", quantity: 1 },
       { text: "1/2 cup breadcrumbs", ingredient: "breadcrumbs", quantity: 0.5 },
       { text: "1 egg", ingredient: "eggs", quantity: 1 },
+      { text: "2 cloves garlic, minced", ingredient: "garlic", quantity: 2 },
+      { text: "1 tsp dried oregano", ingredient: "oregano", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
       { text: "1 jar marinara sauce", ingredient: "marinara sauce", quantity: 1 },
       { text: "1/4 cup grated Parmesan", ingredient: "parmesan", quantity: 0.25 },
     ],
     steps: [
       "Preheat oven to 400°F.",
-      "Mix the ground beef, breadcrumbs, egg, and Parmesan together, then roll into meatballs.",
+      "Mix the ground beef, breadcrumbs, egg, garlic, oregano, salt, pepper, and Parmesan together, then roll into meatballs - salt is what keeps ground meat from tasting bland once baked.",
       "Arrange on a baking sheet and bake for 20 minutes until browned.",
       "Simmer the baked meatballs in marinara sauce for 10 minutes before serving.",
     ],
@@ -4210,12 +4222,16 @@ const recipes = [
   {
     slug: "simple-fish-tacos",
     title: "Simple Fish Tacos",
-    description: "Flaky pan-seared fish tucked into warm tortillas with a creamy slaw.",
+    description:
+      "Flaky pan-seared fish rubbed with chili powder and cumin, tucked into warm tortillas with a creamy slaw - chili powder and cumin are the seasoning the fish actually needs instead of going into the pan plain.",
     imageEmoji: "🌮",
     cookTimeMinutes: 25,
     servings: 4,
     ingredients: [
       { text: "1 lb white fish fillets", ingredient: "white fish", quantity: 1 },
+      { text: "1 tsp chili powder", ingredient: "chili powder", quantity: 1 },
+      { text: "1/2 tsp cumin", ingredient: "cumin", quantity: 0.5 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
       { text: "8 small corn tortillas", ingredient: "corn tortillas", quantity: 8 },
       { text: "2 cups shredded cabbage", ingredient: "cabbage", quantity: 2 },
       { text: "1/3 cup mayonnaise", ingredient: "mayonnaise", quantity: 0.33 },
@@ -4223,7 +4239,7 @@ const recipes = [
       { text: "2 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 2 },
     ],
     steps: [
-      "Season the fish and cook in oil over medium-high heat for 3-4 minutes per side until it flakes easily; break into chunks.",
+      "Rub the fish with chili powder, cumin, and salt, then cook in oil over medium-high heat for 3-4 minutes per side until it flakes easily; break into chunks.",
       "Mix the cabbage with mayonnaise and lime juice to make a quick slaw.",
       "Warm the tortillas.",
       "Fill each tortilla with fish and top with the slaw.",
@@ -4544,7 +4560,8 @@ const recipes = [
   {
     slug: "simple-chicken-soup",
     title: "Simple Chicken Soup",
-    description: "A basic, comforting chicken soup with vegetables - easy enough for a beginner cook.",
+    description:
+      "A basic, comforting chicken soup with vegetables, a bay leaf, salt, and pepper - easy enough for a beginner cook, and actually seasoned instead of tasting like plain broth.",
     imageEmoji: "🍲",
     cookTimeMinutes: 45,
     servings: 6,
@@ -4553,14 +4570,17 @@ const recipes = [
       { text: "2 carrots, sliced", ingredient: "carrot", quantity: 2 },
       { text: "2 celery stalks, sliced", ingredient: "celery", quantity: 2 },
       { text: "1 onion, diced", ingredient: "onion", quantity: 1 },
+      { text: "1 bay leaf", ingredient: "bay leaf", quantity: 1 },
       { text: "8 cups chicken broth", ingredient: "chicken broth", quantity: 8 },
       { text: "1 cup egg noodles", ingredient: "egg noodles", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
     ],
     steps: [
-      "Combine the chicken breasts, carrots, celery, onion, and chicken broth in a large pot.",
+      "Combine the chicken breasts, carrots, celery, onion, bay leaf, and chicken broth in a large pot.",
       "Bring to a boil, then reduce heat and simmer for 25 minutes until the chicken is cooked through.",
       "Remove the chicken, shred it, and return it to the pot along with the egg noodles.",
-      "Simmer for another 8-10 minutes until the noodles are tender.",
+      "Simmer for another 8-10 minutes until the noodles are tender, then remove the bay leaf and season with salt and pepper before serving.",
     ],
     tags: ["dinner", "quick"],
   },
@@ -4643,7 +4663,8 @@ const recipes = [
   {
     slug: "simple-lentil-soup",
     title: "Simple Lentil Soup",
-    description: "A hearty, protein-packed soup of red lentils simmered with vegetables.",
+    description:
+      "A hearty, protein-packed soup of red lentils simmered with vegetables and finished with salt - lentils cooked in unsalted broth the whole way through stay bland no matter how long they simmer.",
     imageEmoji: "🍲",
     cookTimeMinutes: 40,
     servings: 6,
@@ -4654,19 +4675,21 @@ const recipes = [
       { text: "2 cloves garlic, minced", ingredient: "garlic", quantity: 2 },
       { text: "6 cups vegetable broth", ingredient: "vegetable broth", quantity: 6 },
       { text: "1 tsp cumin", ingredient: "cumin", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
     ],
     steps: [
       "Sauté the onion, carrots, and garlic in a large pot until softened.",
       "Stir in the lentils, vegetable broth, and cumin.",
       "Bring to a boil, then reduce heat and simmer for 25-30 minutes until the lentils are tender.",
-      "Season to taste before serving.",
+      "Season with salt before serving.",
     ],
     tags: ["lunch", "vegan", "vegetarian"],
   },
   {
     slug: "simple-garden-salad",
     title: "Simple Garden Salad",
-    description: "A crisp, refreshing salad of lettuce, tomato, and cucumber with a light vinaigrette.",
+    description:
+      "A crisp, refreshing salad of lettuce, tomato, and cucumber with a properly emulsified vinaigrette - mustard is what binds oil and vinegar into a real dressing instead of two liquids sitting side by side, and salt is what keeps it from tasting flat.",
     imageEmoji: "🥗",
     cookTimeMinutes: 10,
     servings: 4,
@@ -4676,10 +4699,13 @@ const recipes = [
       { text: "1 cucumber, sliced", ingredient: "cucumber", quantity: 1 },
       { text: "3 tbsp olive oil", ingredient: "olive oil", quantity: 3 },
       { text: "1 tbsp vinegar", ingredient: "vinegar", quantity: 1 },
+      { text: "1 tsp dijon mustard", ingredient: "dijon mustard", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
     ],
     steps: [
       "Combine the lettuce, tomatoes, and cucumber in a large bowl.",
-      "Whisk together the olive oil and vinegar.",
+      "Whisk together the olive oil, vinegar, mustard, salt, and pepper - mustard is what binds the oil and vinegar into a proper emulsified dressing.",
       "Toss the salad with the dressing just before serving.",
     ],
     tags: ["lunch", "vegan", "vegetarian", "quick", "salad"],
@@ -4711,7 +4737,8 @@ const recipes = [
   {
     slug: "simple-fruit-salad",
     title: "Simple Fruit Salad",
-    description: "A refreshing mix of seasonal fruit - a no-cook side or dessert.",
+    description:
+      "A refreshing mix of seasonal fruit tossed with lime juice - a no-cook side or dessert. Lime juice is what keeps the banana slices from browning and brightens the other fruit instead of leaving it flat.",
     imageEmoji: "🍉",
     cookTimeMinutes: 15,
     servings: 6,
@@ -4721,10 +4748,11 @@ const recipes = [
       { text: "2 cups pineapple chunks", ingredient: "pineapple", quantity: 2 },
       { text: "2 bananas, sliced", ingredient: "banana", quantity: 2 },
       { text: "1 tbsp honey", ingredient: "honey", quantity: 1 },
+      { text: "1 tbsp lime juice", ingredient: "lime juice", quantity: 1 },
     ],
     steps: [
       "Combine the strawberries, grapes, pineapple, and bananas in a large bowl.",
-      "Drizzle with honey and toss gently.",
+      "Drizzle with honey and lime juice and toss gently - lime juice is what keeps the bananas from browning.",
       "Chill before serving.",
     ],
     tags: ["dessert", "vegan", "vegetarian", "quick", "salad"],
@@ -4756,7 +4784,8 @@ const recipes = [
   {
     slug: "simple-bean-salad",
     title: "Simple Bean Salad",
-    description: "A protein-packed, no-cook salad of mixed beans in a light vinaigrette.",
+    description:
+      "A protein-packed, no-cook salad of mixed beans in a light, salted vinaigrette - salt and pepper are what keep the dressing from tasting like plain oil and vinegar.",
     imageEmoji: "🫘",
     cookTimeMinutes: 15,
     servings: 6,
@@ -4766,10 +4795,12 @@ const recipes = [
       { text: "1 can corn, drained", ingredient: "corn", quantity: 1 },
       { text: "3 tbsp olive oil", ingredient: "olive oil", quantity: 3 },
       { text: "2 tbsp red wine vinegar", ingredient: "red wine vinegar", quantity: 2 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
     ],
     steps: [
       "Combine the kidney beans, black beans, and corn in a large bowl.",
-      "Whisk together the olive oil and red wine vinegar.",
+      "Whisk together the olive oil, red wine vinegar, salt, and pepper.",
       "Toss the beans with the dressing.",
       "Chill for at least 30 minutes before serving.",
     ],
@@ -4917,21 +4948,24 @@ const recipes = [
   {
     slug: "simple-fruit-crisp",
     title: "Simple Fruit Crisp",
-    description: "Baked fruit topped with a buttery oat crumble - a warm, easy dessert.",
+    description:
+      "Baked fruit tossed with lemon juice and topped with a buttery, salted oat crumble - a warm, easy dessert. Lemon juice keeps the apples bright instead of dull, and salt keeps the crumble from tasting flatly sweet.",
     imageEmoji: "🍎",
     cookTimeMinutes: 45,
     servings: 6,
     ingredients: [
       { text: "6 apples, sliced", ingredient: "apple", quantity: 6 },
+      { text: "1 tbsp lemon juice", ingredient: "lemon juice", quantity: 1 },
       { text: "1 cup rolled oats", ingredient: "oats", quantity: 1 },
       { text: "1/2 cup flour", ingredient: "flour", quantity: 0.5 },
       { text: "1/2 cup brown sugar", ingredient: "brown sugar", quantity: 0.5 },
       { text: "1/2 cup melted butter", ingredient: "butter", quantity: 0.5 },
       { text: "1 tsp cinnamon", ingredient: "cinnamon", quantity: 1 },
+      { text: "Pinch of salt", ingredient: "salt", quantity: null },
     ],
     steps: [
-      "Preheat oven to 375°F and spread the sliced apples in a baking dish.",
-      "Mix the oats, flour, brown sugar, melted butter, and cinnamon together until crumbly.",
+      "Preheat oven to 375°F and toss the sliced apples with lemon juice, then spread in a baking dish.",
+      "Mix the oats, flour, brown sugar, melted butter, cinnamon, and salt together until crumbly.",
       "Sprinkle the oat mixture evenly over the apples.",
       "Bake for 35-40 minutes until the topping is golden and the fruit is bubbling.",
     ],
@@ -4965,7 +4999,8 @@ const recipes = [
   {
     slug: "simple-shortbread-cookies",
     title: "Simple Shortbread Cookies",
-    description: "Buttery, crumbly shortbread cookies made with just three ingredients.",
+    description:
+      "Buttery, crumbly shortbread cookies made with just four ingredients - a pinch of salt is what real shortbread always includes to keep all that butter from tasting flat.",
     imageEmoji: "🍪",
     cookTimeMinutes: 35,
     servings: 16,
@@ -4973,11 +5008,12 @@ const recipes = [
       { text: "1 cup butter, softened", ingredient: "butter", quantity: 1 },
       { text: "1/2 cup sugar", ingredient: "sugar", quantity: 0.5 },
       { text: "2 cups flour", ingredient: "flour", quantity: 2 },
+      { text: "1/4 tsp salt", ingredient: "salt", quantity: 0.25 },
     ],
     steps: [
       "Preheat oven to 325°F.",
       "Cream the butter and sugar together until light and fluffy.",
-      "Mix in the flour until a soft dough forms.",
+      "Mix in the flour and salt until a soft dough forms.",
       "Roll out the dough, cut into shapes, and bake for 15-18 minutes until lightly golden at the edges.",
     ],
     tags: ["dessert", "vegetarian", "baking"],
