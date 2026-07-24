@@ -9385,7 +9385,8 @@ const recipes = [
   {
     slug: "breakfast-sausage-patties",
     title: "Breakfast Sausage Patties",
-    description: "Homemade seasoned pork sausage patties, pan-fried until golden.",
+    description:
+      "Homemade seasoned pork sausage patties, pan-fried until golden - a touch of brown sugar alongside the sage and pepper is what gives real breakfast sausage its sweet-savory balance, and salt is what most quick versions leave out entirely.",
     imageEmoji: "🥓",
     cookTimeMinutes: 20,
     servings: 4,
@@ -9394,11 +9395,13 @@ const recipes = [
       { text: "1 tsp sage", ingredient: "sage", quantity: 1 },
       { text: "1/2 tsp black pepper", ingredient: "pepper", quantity: 0.5 },
       { text: "1/4 tsp red pepper flakes", ingredient: "red pepper flakes", quantity: 0.25 },
+      { text: "1/2 tsp salt", ingredient: "salt", quantity: 0.5 },
+      { text: "1 tsp brown sugar", ingredient: "brown sugar", quantity: 1 },
       { text: "1 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 1 },
     ],
     steps: [
-      "Mix the ground pork with sage, pepper, and red pepper flakes.",
-      "Form into small patties.",
+      "Gently mix the ground pork with sage, pepper, red pepper flakes, salt, and brown sugar - overmixing is what makes sausage patties dense instead of tender.",
+      "Form into small patties and chill for 15 minutes to help them hold together - the salt is what actually seasons the meat, which most quick versions skip.",
       "Cook in oil over medium heat for 4-5 minutes per side until cooked through.",
       "Serve hot.",
     ],
@@ -9504,7 +9507,8 @@ const recipes = [
   {
     slug: "breakfast-skillet",
     title: "Breakfast Skillet",
-    description: "A hearty one-pan breakfast of potatoes, eggs, sausage, and peppers.",
+    description:
+      "A hearty one-pan breakfast of potatoes, eggs, sausage, and peppers - parboiling the potatoes first is what lets them cook through and crisp at the same time, and seasoning at every stage is what keeps this from tasting flat.",
     imageEmoji: "🍳",
     cookTimeMinutes: 35,
     servings: 4,
@@ -9514,11 +9518,14 @@ const recipes = [
       { text: "1/2 red bell pepper, diced", ingredient: "red pepper", quantity: 0.5 },
       { text: "4 eggs", ingredient: "eggs", quantity: 4 },
       { text: "2 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 2 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
     ],
     steps: [
-      "Cook the potatoes in oil in a large skillet until golden and tender, about 12 minutes.",
+      "Parboil the diced potatoes in salted water for 5 minutes, then drain and pat dry - this lets them cook through and crisp at the same time instead of staying raw in the middle.",
+      "Cook the potatoes in oil in a large skillet until golden and tender, about 8-10 minutes, seasoning with salt and pepper.",
       "Add the sausage and red pepper, cooking until the sausage is browned.",
-      "Make wells in the mixture and crack the eggs into them.",
+      "Make wells in the mixture and crack the eggs into them, seasoning the eggs with salt and pepper.",
       "Cover and cook for 5-6 minutes until the eggs are set to your liking.",
     ],
     tags: ["breakfast"],
