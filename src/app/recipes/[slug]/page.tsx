@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getRecipeBySlug } from "@/lib/recipes";
 import { getCurrentUser } from "@/lib/dal";
 import { isFavorited } from "@/lib/favorites";
@@ -9,6 +10,48 @@ import { getLocale } from "@/lib/locale";
 import { t, tagLabel } from "@/lib/i18n";
 import { RatingWidget } from "@/components/RatingWidget";
 import { CommentSection } from "@/components/CommentSection";
+import { SITE_URL } from "@/lib/site";
+
+// ISO 8601 duration (e.g. 1h 30m -> "PT1H30M") - the format schema.org's
+// Recipe.totalTime and Google's recipe rich results both require.
+function toIsoDuration(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `PT${hours > 0 ? `${hours}H` : ""}${mins > 0 ? `${mins}M` : ""}`;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale();
+  const recipe = await getRecipeBySlug(slug, locale);
+  if (!recipe) return {};
+
+  const url = `${SITE_URL}/recipes/${recipe.slug}`;
+  const ogImage = `${url}/opengraph-image`;
+
+  return {
+    title: recipe.title,
+    description: recipe.description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title: recipe.title,
+      description: recipe.description,
+      url,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: recipe.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: recipe.title,
+      description: recipe.description,
+      images: [ogImage],
+    },
+  };
+}
 
 export default async function RecipePage({
   params,
@@ -33,8 +76,37 @@ export default async function RecipePage({
   ]);
   const toggleAction = toggleFavorite.bind(null, recipe.id, recipe.slug);
 
+  const recipeUrl = `${SITE_URL}/recipes/${recipe.slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.title,
+    description: recipe.description,
+    image: [`${recipeUrl}/opengraph-image`],
+    datePublished: recipe.createdAt.toISOString(),
+    totalTime: toIsoDuration(recipe.cookTimeMinutes),
+    recipeYield: `${recipe.servings}`,
+    recipeIngredient: recipe.ingredients,
+    recipeInstructions: recipe.steps.map((step) => ({
+      "@type": "HowToStep",
+      text: step,
+    })),
+    keywords: recipe.tags.join(", "),
+    ...(ratingSummary.count > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: ratingSummary.average,
+        reviewCount: ratingSummary.count,
+      },
+    }),
+  };
+
   return (
     <main className="max-w-3xl mx-auto px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex items-start justify-between gap-4">
         <div className="text-6xl mb-4">{recipe.imageEmoji}</div>
         {user ? (

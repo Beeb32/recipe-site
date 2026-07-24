@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getLocale } from "@/lib/locale";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,9 +15,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description = "Browse, search, and cook from a shared collection of recipes with real ingredients, real steps, and no fluff.";
+
 export const metadata: Metadata = {
-  title: "What to cook",
-  description: "Browse, search, and cook from a small shared recipe collection.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    template: `%s | ${SITE_NAME}`,
+    default: SITE_NAME,
+  },
+  description,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description,
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description,
+  },
 };
 
 export default async function RootLayout({

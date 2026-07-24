@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import type { Locale } from "@/lib/locale";
 
@@ -63,7 +64,13 @@ export async function getAllRecipes(locale: Locale = "en"): Promise<RecipeSummar
   });
 }
 
-export async function getRecipeBySlug(slug: string, locale: Locale = "en"): Promise<RecipeDetail | null> {
+// Wrapped in React's cache() so generateMetadata and the page component
+// (which both need the same recipe) share one DB call per request instead
+// of fetching it twice.
+export const getRecipeBySlug = cache(async function getRecipeBySlug(
+  slug: string,
+  locale: Locale = "en"
+): Promise<RecipeDetail | null> {
   const r = await prisma.recipe.findUnique({
     where: { slug },
     include: {
@@ -96,6 +103,15 @@ export async function getRecipeBySlug(slug: string, locale: Locale = "en"): Prom
     steps: translation?.steps ? parseJsonArray(translation.steps) : parseJsonArray(r.steps),
     tags: parseJsonArray(r.tags),
   };
+});
+
+// Slug + createdAt only, for the sitemap - avoids pulling ingredients and
+// translations for every recipe just to list URLs.
+export async function getAllRecipeSlugs(): Promise<{ slug: string; createdAt: Date }[]> {
+  return prisma.recipe.findMany({
+    select: { slug: true, createdAt: true },
+    orderBy: { slug: "asc" },
+  });
 }
 
 export async function getAllTags(): Promise<string[]> {
