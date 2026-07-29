@@ -16,6 +16,9 @@ export async function SiteHeader() {
           🍳 What to cook
         </Link>
         <nav className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+          <Link href="/wheel" className="underline underline-offset-2">
+            {strings.wheelNavLink}
+          </Link>
           <LanguageToggle locale={locale} />
           {user ? (
             <>
