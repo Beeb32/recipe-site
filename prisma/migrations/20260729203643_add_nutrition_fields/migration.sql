@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Recipe" ADD COLUMN "caloriesPerServing" INTEGER;
+ALTER TABLE "Recipe" ADD COLUMN "carbsG" INTEGER;
+ALTER TABLE "Recipe" ADD COLUMN "fatG" INTEGER;
+ALTER TABLE "Recipe" ADD COLUMN "proteinG" INTEGER;

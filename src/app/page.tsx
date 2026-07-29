@@ -11,7 +11,8 @@ export default async function Home() {
   return (
     <main className="max-w-5xl mx-auto px-6 py-12">
       <h1 className="text-3xl font-semibold tracking-tight mb-2">{strings.recipesHeading}</h1>
-      <p className="opacity-70 mb-8">{strings.recipesSubheading}</p>
+      <p className="opacity-70 mb-1">{strings.recipesSubheading}</p>
+      <p className="text-sm opacity-50 mb-8">{strings.recipeCount(recipes.length)}</p>
       <RecipeBrowser recipes={recipes} allTags={tags} locale={locale} />
     </main>
   );

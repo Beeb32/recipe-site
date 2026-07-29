@@ -32,6 +32,14 @@ model Recipe {
   steps             String
   tags              String
   createdAt         DateTime           @default(now())
+  // Nutrition is per serving. Nullable since it's being backfilled in
+  // batches - null just means "not estimated yet", not zero. Always
+  // LLM-estimated from the ingredient list rather than lab-measured, so the
+  // UI must label it "estimated" wherever it's shown.
+  caloriesPerServing Int?
+  proteinG          Int?
+  carbsG            Int?
+  fatG              Int?
   favorites         Favorite[]
   ratings           Rating[]
   comments          Comment[]

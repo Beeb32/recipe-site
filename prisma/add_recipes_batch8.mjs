@@ -1,0 +1,600 @@
+import { prisma, runTranslations } from "./translate-lib.mjs";
+
+// 10 more Bulgarian recipes, each web-researched for authentic technique
+// before writing, per standing instructions. Deliberately reaching for
+// rarer/lesser-known items this round: a homegrown sunflower-seed halva
+// (Bulgaria grows sunflowers, not sesame), Lenten vine-leaf sarmi, a fall
+// pickling project, a shared-Balkan sesame bread ring (noted honestly as
+// not uniquely Bulgarian), an old-fashioned breaded-brain dish, the
+// traditional stuffed carp centerpiece of Badni Vecher, and homemade
+// sirene itself (the cheese used across dozens of already-added recipes,
+// but never made from scratch as its own recipe).
+const newRecipes = [
+  {
+    slug: "slanchogledov-halva",
+    title: "Slanchogledov Halva (Bulgarian Sunflower Seed Halva)",
+    description:
+      "A dense, fudge-like Bulgarian confection made from toasted sunflower seeds ground into a paste and bound with sugar and butter - a homegrown alternative to sesame tahini halva that emerged because Bulgaria grows sunflowers, not sesame; toasting the seeds first, rather than grinding them raw, is what gives the halva its deep, nutty flavor instead of a flat, grassy one.",
+    imageEmoji: "🌻",
+    cookTimeMinutes: 30,
+    servings: 8,
+    ingredients: [
+      { text: "2 cups sunflower seeds, shelled", ingredient: "sunflower seeds", quantity: 2 },
+      { text: "1 1/4 cups powdered sugar", ingredient: "powdered sugar", quantity: 1.25 },
+      { text: "1/2 cup butter, melted", ingredient: "butter", quantity: 0.5 },
+      { text: "1 tsp vanilla extract", ingredient: "vanilla extract", quantity: 1 },
+    ],
+    steps: [
+      "Toast the sunflower seeds in a dry skillet over medium heat, stirring often, for 5-7 minutes, until fragrant and lightly golden - toasting first is what gives the halva its deep, nutty flavor instead of a flat, grassy one.",
+      "Let the seeds cool slightly, then grind them in a food processor until they form a smooth, slightly oily paste, scraping down the sides as needed, about 3-5 minutes.",
+      "Add the powdered sugar, melted butter, and vanilla to the ground seeds and process again until fully combined into a thick, uniform paste.",
+      "Press the mixture firmly into a lined loaf pan or small dish, smoothing the top.",
+      "Chill in the refrigerator for at least 2 hours, until firm enough to slice.",
+      "Cut into small squares or bars to serve.",
+    ],
+    tags: ["dessert", "vegetarian", "snack"],
+    bg: {
+      title: "Слънчогледов халва",
+      description:
+        "Плътен, подобен на фъдж български десерт от препечени слънчогледови семки, смлени на паста и свързани със захар и масло - домашна алтернатива на сусамовата тахан халва, възникнала, защото България отглежда слънчоглед, не сусам; препичането на семките първо, вместо да се смилат сурови, е това, което дава на халвата дълбокия ѝ, ядков вкус, вместо плосък, тревист.",
+      steps: [
+        "Препечете слънчогледовите семки в сух тиган на среден огън, разбърквайки често, 5-7 минути, докато замиришат и леко позлатеят - препичането първо е това, което дава на халвата дълбокия ѝ, ядков вкус, вместо плосък, тревист.",
+        "Оставете семките да изстинат леко, после ги смелете в кухненски робот, докато се получи гладка, леко мазна паста, изстъргвайки стените при нужда, около 3-5 минути.",
+        "Добавете пудрата захар, разтопеното масло и ванилията към смлените семки и пуснете отново, докато се смесят напълно в гъста, еднородна паста.",
+        "Притиснете сместа плътно в застлана тава за хляб или малко блюдо, изглаждайки повърхността.",
+        "Охладете в хладилника поне 2 часа, докато стане достатъчно стегната за рязане.",
+        "Нарежете на малки квадратчета или блокчета, за да сервирате.",
+      ],
+      ingredients: [
+        "2 чаши слънчогледови семки, обелени",
+        "1 1/4 чаши пудра захар",
+        "1/2 чаша масло, разтопено",
+        "1 ч.л. екстракт от ванилия",
+      ],
+    },
+  },
+  {
+    slug: "tikvichki-s-kiselo-mlyako",
+    title: "Tikvichki s Kiselo Mlyako (Fried Zucchini with Garlic Yogurt)",
+    description:
+      "Thin rounds of zucchini, salted to draw out moisture, lightly floured, and pan-fried until golden, served with a garlic-dill yogurt sauce - salting and draining the zucchini before frying is what keeps it from steaming and going soft in the oil instead of crisping properly.",
+    imageEmoji: "🥒",
+    cookTimeMinutes: 35,
+    servings: 4,
+    ingredients: [
+      { text: "3 medium zucchini, sliced into rounds", ingredient: "zucchini", quantity: 3 },
+      { text: "1 tsp salt (for the zucchini)", ingredient: "salt", quantity: 1 },
+      { text: "1/2 cup flour", ingredient: "flour", quantity: 0.5 },
+      { text: "1/3 cup vegetable oil, for frying", ingredient: "vegetable oil", quantity: 0.33 },
+      { text: "1 cup plain yogurt", ingredient: "yogurt", quantity: 1 },
+      { text: "2 cloves garlic, minced", ingredient: "garlic", quantity: 2 },
+      { text: "2 tbsp dill, chopped", ingredient: "dill", quantity: 2 },
+      { text: "Salt to taste (for the sauce)", ingredient: "salt", quantity: null },
+    ],
+    steps: [
+      "Toss the zucchini rounds with the salt and place in a colander for 20-30 minutes to draw out excess moisture - skipping this step is what makes the zucchini steam and turn soggy in the pan instead of frying up crisp.",
+      "Pat the zucchini rounds dry with paper towels.",
+      "Dredge each round lightly in flour, shaking off the excess.",
+      "Heat the oil in a skillet over medium heat and fry the zucchini in batches for 2-3 minutes per side, until golden brown. Drain on paper towels.",
+      "Meanwhile, mix the yogurt with the garlic, dill, and a pinch of salt to make the sauce.",
+      "Serve the fried zucchini warm with the garlic-dill yogurt sauce alongside or spooned over the top.",
+    ],
+    tags: ["snack", "vegetarian", "quick"],
+    bg: {
+      title: "Тиквички с кисело мляко",
+      description:
+        "Тънки резенчета тиквички, посолени, за да пуснат влага, леко овалени в брашно и запържени в тиган до златисто, сервирани със сос от кисело мляко, чесън и копър - осоляването и отцеждането на тиквичките преди пържене е това, което ги пази да не се задушат и омекнат в олиото, вместо правилно да захрупнат.",
+      steps: [
+        "Разбъркайте резенчетата тиквички със солта и ги наредете в цедка за 20-30 минути, за да пуснат излишната влага - пропускането на тази стъпка е това, което кара тиквичките да се задушат и разкиснат в тигана, вместо да захрупнат.",
+        "Подсушете резенчетата тиквички с хартиени кърпи.",
+        "Овалайте леко всяко резенче в брашно, изтръсквайки излишъка.",
+        "Загрейте олиото в тиган на среден огън и пържете тиквичките на порции по 2-3 минути от всяка страна, докато станат златисти. Отцедете върху хартиени кърпи.",
+        "Междувременно смесете киселото мляко с чесъна, копъра и щипка сол, за да направите соса.",
+        "Сервирайте запържените тиквички топли със соса от кисело мляко и копър отстрани или полят отгоре.",
+      ],
+      ingredients: [
+        "3 средни тиквички, нарязани на резенчета",
+        "1 ч.л. сол (за тиквичките)",
+        "1/2 чаша брашно",
+        "1/3 чаша олио за пържене",
+        "1 чаша кисело мляко",
+        "2 скилидки чесън, ситно нарязани",
+        "2 с.л. копър, нарязан",
+        "Сол на вкус (за соса)",
+      ],
+    },
+  },
+  {
+    slug: "lozovi-sarmi",
+    title: "Lozovi Sarmi (Lenten Vine Leaf Sarmi)",
+    description:
+      "Bulgaria's meatless summer sarmi - grape leaves wrapped tightly around a filling of rice, onion, and herbs, simmered until the leaves turn tender - using fresh grape leaves in summer instead of the sauerkraut used for winter sarmi is what gives these their bright, slightly tart, herbal flavor instead of the deeper, tangier winter version.",
+    imageEmoji: "🍇",
+    cookTimeMinutes: 75,
+    servings: 6,
+    ingredients: [
+      { text: "40 grape leaves, fresh or jarred", ingredient: "grape leaves", quantity: 40 },
+      { text: "1 cup rice", ingredient: "rice", quantity: 1 },
+      { text: "1 onion, finely chopped", ingredient: "onion", quantity: 1 },
+      { text: "1/4 cup vegetable oil, divided", ingredient: "vegetable oil", quantity: 0.25 },
+      { text: "2 tbsp dill, chopped", ingredient: "dill", quantity: 2 },
+      { text: "2 tbsp parsley, chopped", ingredient: "parsley", quantity: 2 },
+      { text: "1 tsp paprika", ingredient: "paprika", quantity: 1 },
+      { text: "2 cups water", ingredient: "water", quantity: 2 },
+      { text: "1 tbsp lemon juice", ingredient: "lemon juice", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
+    ],
+    steps: [
+      "If using fresh grape leaves, blanch them in boiling water for 1-2 minutes until pliable, then drain. If using jarred leaves, rinse well to remove excess brine.",
+      "Heat half the oil in a pan and sauté the onion for 5 minutes, until softened.",
+      "Stir in the rice, paprika, dill, parsley, salt, and pepper, and cook for 1-2 minutes to coat the rice in the oil - the rice stays raw here and finishes cooking as the sarmi simmer.",
+      "Lay a grape leaf flat, vein-side up, with the stem end toward you. Place a small spoonful of filling near the stem end, fold the sides in over the filling, then roll up tightly toward the tip of the leaf.",
+      "Line the bottom of a pot with a few torn or extra leaves to prevent sticking, then arrange the rolled sarmi snugly in layers in the pot.",
+      "Pour the water, remaining oil, and lemon juice over the sarmi, then place a small plate directly on top to keep them from unrolling as they cook.",
+      "Bring to a simmer, then cover and cook on low heat for 45-50 minutes, until the rice is tender and the leaves are soft.",
+      "Let rest for 10 minutes before serving, warm or at room temperature, with a side of yogurt.",
+    ],
+    tags: ["lunch", "vegetarian", "vegan"],
+    bg: {
+      title: "Лозови сарми",
+      description:
+        "Безмесните летни български сарми - лозови листа, навити стегнато около пълнеж от ориз, лук и билки, къкрени, докато листата омекнат - използването на пресни лозови листа през лятото, вместо киселото зеле за зимните сарми, е това, което дава на тези сарми техния свеж, леко кисел, билков вкус, вместо по-дълбокия, по-киселия зимен вариант.",
+      steps: [
+        "Ако използвате пресни лозови листа, попарете ги във вряща вода за 1-2 минути, докато омекнат, после отцедете. Ако използвате консервирани листа, изплакнете добре, за да премахнете излишната саламура.",
+        "Загрейте половината от олиото в тиган и запържете лука 5 минути, докато омекне.",
+        "Разбъркайте ориза, червения пипер, копъра, магданоза, солта и пипера, и гответе 1-2 минути, за да покриете ориза с олиото - оризът остава суров тук и се доготвя, докато сармите къкрят.",
+        "Разстелете лозов лист плоско, с жилките нагоре, с дръжката към вас. Поставете малка лъжичка пълнеж близо до дръжката, сгънете страните върху пълнежа, после навийте стегнато към върха на листа.",
+        "Постелете дъното на тенджера с няколко скъсани или допълнителни листа, за да не залепват, после наредете навитите сарми плътно на слоеве в тенджерата.",
+        "Залейте сармите с водата, останалото олио и лимоновия сок, после поставете малка чиния директно отгоре, за да не се развиват, докато се готвят.",
+        "Оставете да заври леко, после покрийте и гответе на слаб огън 45-50 минути, докато оризът омекне, а листата станат меки.",
+        "Оставете да почине 10 минути преди сервиране, топли или на стайна температура, с кисело мляко отстрани.",
+      ],
+      ingredients: [
+        "40 лозови листа, пресни или консервирани",
+        "1 чаша ориз",
+        "1 лук, ситно нарязан",
+        "1/4 чаша олио, разделено",
+        "2 с.л. копър, нарязан",
+        "2 с.л. магданоз, нарязан",
+        "1 ч.л. червен пипер",
+        "2 чаши вода",
+        "1 с.л. лимонов сок",
+        "Сол на вкус",
+        "Черен пипер на вкус",
+      ],
+    },
+  },
+  {
+    slug: "turshiya",
+    title: "Turshiya (Bulgarian Mixed Vegetable Pickle)",
+    description:
+      "Bulgaria's traditional fall pickling project - cauliflower, carrots, peppers, and green tomatoes packed into jars and covered with a hot vinegar brine, then left to mellow for weeks before eating - letting the jars rest for at least 2-3 weeks before opening, rather than eating them right away, is what actually lets the vegetables absorb the brine and turn properly tangy instead of tasting like plain vinegar-soaked vegetables.",
+    imageEmoji: "🥒",
+    cookTimeMinutes: 40,
+    servings: 12,
+    ingredients: [
+      { text: "1 head cauliflower, cut into florets", ingredient: "cauliflower", quantity: 1 },
+      { text: "4 carrots, cut into sticks", ingredient: "carrot", quantity: 4 },
+      { text: "4 bell peppers, cut into strips", ingredient: "bell peppers", quantity: 4 },
+      { text: "4 green tomatoes, quartered", ingredient: "green tomatoes", quantity: 4 },
+      { text: "2 celery stalks, cut into pieces", ingredient: "celery", quantity: 2 },
+      { text: "6 cloves garlic", ingredient: "garlic", quantity: 6 },
+      { text: "4 cups water", ingredient: "water", quantity: 4 },
+      { text: "2 cups vinegar", ingredient: "vinegar", quantity: 2 },
+      { text: "3 tbsp salt", ingredient: "salt", quantity: 3 },
+      { text: "2 tbsp sugar", ingredient: "sugar", quantity: 2 },
+      { text: "1 tsp black peppercorns", ingredient: "black peppercorns", quantity: 1 },
+      { text: "2 bay leaves", ingredient: "bay leaves", quantity: 2 },
+    ],
+    steps: [
+      "Wash all the vegetables well and pack them tightly into clean, sterilized jars, tucking the garlic cloves in among the vegetables.",
+      "Combine the water, vinegar, salt, sugar, peppercorns, and bay leaves in a pot and bring to a boil, stirring until the salt and sugar dissolve.",
+      "Pour the hot brine over the vegetables in the jars, making sure everything is fully submerged and leaving a little headspace at the top.",
+      "Seal the jars tightly and let cool to room temperature.",
+      "Store in a cool, dark place for at least 2-3 weeks before opening - this resting time is what actually lets the vegetables absorb the brine and turn properly tangy, rather than just tasting like plain vinegar-soaked vegetables straight away.",
+      "Once opened, refrigerate and use within a few weeks. Serve as a side with meats or as an appetizer with rakia.",
+    ],
+    tags: ["snack", "vegan", "vegetarian"],
+    bg: {
+      title: "Туршия",
+      description:
+        "Традиционният български есенен проект за туршия - карфиол, моркови, чушки и зелени домати, натъпкани в буркани и залети с гореща оцетна саламура, после оставени да отлежат седмици преди ядене - оставянето на бурканите да престоят поне 2-3 седмици преди отваряне, вместо да се ядат веднага, е това, което наистина позволява на зеленчуците да попият саламурата и да станат правилно кисели, вместо да имат вкус на обикновени накиснати в оцет зеленчуци.",
+      steps: [
+        "Измийте добре всички зеленчуци и ги натъпчете плътно в чисти, стерилизирани буркани, напъхвайки скилидките чесън между зеленчуците.",
+        "Съберете водата, оцета, солта, захарта, черния пипер на зърна и дафиновите листа в тенджера и оставете да заврат, разбърквайки, докато солта и захарта се разтворят.",
+        "Залейте зеленчуците в бурканите с горещата саламура, като се уверите, че всичко е напълно потопено, и оставите малко празно пространство отгоре.",
+        "Затворете бурканите плътно и оставете да изстинат до стайна температура.",
+        "Съхранявайте на хладно, тъмно място поне 2-3 седмици преди отваряне - това време за престояване е това, което наистина позволява на зеленчуците да попият саламурата и да станат правилно кисели, вместо просто да имат вкус на накиснати в оцет зеленчуци веднага.",
+        "След отваряне съхранявайте в хладилник и използвайте в рамките на няколко седмици. Сервирайте като гарнитура с меса или като предястие с ракия.",
+      ],
+      ingredients: [
+        "1 глава карфиол, нарязан на розички",
+        "4 моркова, нарязани на пръчици",
+        "4 чушки, нарязани на ивици",
+        "4 зелени домата, нарязани на четвъртинки",
+        "2 стъбла целина, нарязани на парчета",
+        "6 скилидки чесън",
+        "4 чаши вода",
+        "2 чаши оцет",
+        "3 с.л. сол",
+        "2 с.л. захар",
+        "1 ч.л. черен пипер на зърна",
+        "2 дафинови листа",
+      ],
+    },
+  },
+  {
+    slug: "gevrek",
+    title: "Gevrek (Bulgarian Sesame Bread Ring)",
+    description:
+      "A crusty, chewy sesame-crusted bread ring found in bakeries across Bulgaria - part of a shared Balkan and Ottoman baking tradition also known as simit in Turkey - dipping the shaped rings in molasses syrup before coating them in sesame seeds is what makes the crust turn deeply toasted and shatteringly crisp instead of just lightly seeded.",
+    imageEmoji: "🥯",
+    cookTimeMinutes: 60,
+    servings: 8,
+    ingredients: [
+      { text: "4 cups flour", ingredient: "flour", quantity: 4 },
+      { text: "2 1/4 tsp yeast", ingredient: "yeast", quantity: 2.25 },
+      { text: "1 tsp sugar", ingredient: "sugar", quantity: 1 },
+      { text: "1 1/3 cups warm water", ingredient: "water", quantity: 1.33 },
+      { text: "2 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 2 },
+      { text: "1 1/2 tsp salt", ingredient: "salt", quantity: 1.5 },
+      { text: "1/2 cup molasses", ingredient: "molasses", quantity: 0.5 },
+      { text: "1 cup water (for the molasses dip)", ingredient: "water", quantity: 1 },
+      { text: "1 1/2 cups sesame seeds", ingredient: "sesame seeds", quantity: 1.5 },
+    ],
+    steps: [
+      "Dissolve the yeast and sugar in the warm water and let sit for 5-10 minutes until foamy.",
+      "Mix the flour and salt in a large bowl, add the yeast mixture and oil, and knead for 8-10 minutes until smooth and elastic.",
+      "Cover and let rise in a warm place for 1 hour, until doubled in size.",
+      "Punch down the dough and divide into 8 pieces. Roll each piece into a long rope, then join the ends to form a ring.",
+      "Whisk the molasses with the 1 cup of water in a shallow dish.",
+      "Dip each ring into the molasses mixture, coating it fully, then press both sides into the sesame seeds - the molasses dip is what makes the sesame crust toast deeply and turn shatteringly crisp in the oven, rather than just lightly browning.",
+      "Place the coated rings on a baking sheet, cover loosely, and let rest for 15-20 minutes.",
+      "Preheat the oven to 400°F and bake for 20-25 minutes, until deep golden brown and crisp.",
+      "Let cool slightly before serving, traditionally with yogurt or ayran.",
+    ],
+    tags: ["breakfast", "baking", "vegan"],
+    bg: {
+      title: "Геврек",
+      description:
+        "Хрупкав, дъвчащ се хляб на пръстен, покрит със сусам, който се среща в пекарни из цяла България - част от споделена балканска и османска традиция на печене, известна също като симид в Турция - потапянето на оформените пръстени в меласов сироп, преди да се панират в сусам, е това, което кара коричката да се препече дълбоко и да стане пращящо хрупкава, вместо просто леко поръсена.",
+      steps: [
+        "Разтворете маята и захарта в топлата вода и оставете за 5-10 минути, докато се разпени.",
+        "Смесете брашното и солта в голяма купа, добавете маената смес и олиото, и месете 8-10 минути, докато стане гладко и еластично.",
+        "Покрийте и оставете да втаса на топло място 1 час, докато удвои обема си.",
+        "Ударете тестото и го разделете на 8 части. Разточете всяка част на дълго въже, после съединете краищата, за да образувате пръстен.",
+        "Разбийте меласата с 1-та чаша вода в плитко блюдо.",
+        "Потопете всеки пръстен в меласовата смес, покривайки го напълно, после притиснете двете страни в сусама - потапянето в меласа е това, което кара сусамовата коричка да се препече дълбоко и да стане пращящо хрупкава във фурната, вместо просто леко да позлатее.",
+        "Наредете панираните пръстени върху тава за печене, покрийте свободно, и оставете да починат 15-20 минути.",
+        "Загрейте фурната на 200°C и печете 20-25 минути, докато станат дълбоко златисти и хрупкави.",
+        "Оставете да изстинат леко преди сервиране, традиционно с кисело мляко или айран.",
+      ],
+      ingredients: [
+        "4 чаши брашно",
+        "2 1/4 ч.л. мая",
+        "1 ч.л. захар",
+        "1 1/3 чаши топла вода",
+        "2 с.л. олио",
+        "1 1/2 ч.л. сол",
+        "1/2 чаша меласа",
+        "1 чаша вода (за меласовото потапяне)",
+        "1 1/2 чаши сусам",
+      ],
+    },
+  },
+  {
+    slug: "dyulovo-sladko",
+    title: "Dyulovo Sladko (Bulgarian Quince Jam)",
+    description:
+      "A fragrant, amber-colored Bulgarian preserve made from coarsely grated quince simmered slowly with sugar, lemon juice, and cloves until it turns thick and jewel-toned - quince flesh oxidizes to brown within minutes of cutting, so grating it directly into acidulated water and cooking it gently rather than at a hard boil is what keeps the jam a clear amber instead of a dull, muddy brown.",
+    imageEmoji: "🍯",
+    cookTimeMinutes: 90,
+    servings: 10,
+    ingredients: [
+      { text: "4 lb quince, peeled and coarsely grated", ingredient: "quince", quantity: 4 },
+      { text: "4 cups sugar", ingredient: "sugar", quantity: 4 },
+      { text: "3 tbsp lemon juice", ingredient: "lemon juice", quantity: 3 },
+      { text: "2 cups water", ingredient: "water", quantity: 2 },
+      { text: "4 whole cloves", ingredient: "cloves", quantity: 4 },
+      { text: "1/2 cup walnuts, chopped (optional)", ingredient: "walnuts", quantity: 0.5 },
+    ],
+    steps: [
+      "Fill a large bowl with the water and 1 tbsp of the lemon juice. Peel and coarsely grate the quince directly into this acidulated water as you go - quince flesh browns within minutes of cutting, so working directly into the lemon water is what keeps it pale instead of turning it dull brown before it even cooks.",
+      "Transfer the grated quince and its soaking liquid to a wide, heavy-bottomed pot. Add the sugar, remaining lemon juice, and cloves.",
+      "Bring to a gentle boil, then reduce to a low simmer - keeping it at a gentle simmer rather than a hard boil is what lets the jam turn a clear, jewel-toned amber instead of a dull, muddy brown.",
+      "Cook uncovered for 60-75 minutes, stirring occasionally and skimming off any foam, until the jam has thickened and turned deep amber.",
+      "Stir in the walnuts, if using, during the last 5 minutes.",
+      "Remove the cloves, then ladle the hot jam into sterilized jars and seal immediately.",
+      "Let cool completely before storing; refrigerate after opening.",
+    ],
+    tags: ["snack", "vegetarian", "vegan"],
+    bg: {
+      title: "Дюлово сладко",
+      description:
+        "Ароматно, кехлибарено българско сладко от едро настъргани дюли, варени бавно със захар, лимонов сок и карамфил, докато стане гъсто и с цвят на скъпоценен камък - месото на дюлята потъмнява до кафяво за минути след рязане, затова настъргването директно в подкиселена вода и готвенето леко, вместо на силно кипене, е това, което пази сладкото ясно кехлибарено, вместо тъпо, кално кафяво.",
+      steps: [
+        "Напълнете голяма купа с водата и 1 с.л. от лимоновия сок. Обелете и настържете едро дюлите директно в тази подкиселена вода, докато работите - месото на дюлята потъмнява за минути след рязане, затова работенето директно във водата с лимон е това, което го пази бледо, вместо да потъмнее, преди дори да се сготви.",
+        "Прехвърлете настърганите дюли и течността им в широка тенджера с дебело дъно. Добавете захарта, останалия лимонов сок и карамфила.",
+        "Оставете да заври леко, после намалете до слабо къкрене - поддържането на леко къкрене, вместо силно кипене, е това, което позволява на сладкото да стане ясно кехлибарено с цвят на скъпоценен камък, вместо тъпо, кално кафяво.",
+        "Гответе без капак 60-75 минути, разбърквайки от време на време и обирайки евентуалната пяна, докато сладкото се сгъсти и стане дълбоко кехлибарено.",
+        "Разбъркайте орехите, ако използвате, през последните 5 минути.",
+        "Извадете карамфила, после разпределете горещото сладко в стерилизирани буркани и затворете веднага.",
+        "Оставете да изстине напълно преди съхранение; след отваряне съхранявайте в хладилник.",
+      ],
+      ingredients: [
+        "1.8 кг дюли, обелени и едро настъргани",
+        "4 чаши захар",
+        "3 с.л. лимонов сок",
+        "2 чаши вода",
+        "4 целия карамфилчета",
+        "1/2 чаша орехи, нарязани (по избор)",
+      ],
+    },
+  },
+  {
+    slug: "mozak-pane",
+    title: "Mozak Pane (Bulgarian Breaded Veal Brain)",
+    description:
+      "An old-fashioned Bulgarian delicacy from the era of whole-animal butchery - poached veal brain, sliced and double-breaded, then pan-fried until the crust is golden and crisp around a soft, custardy interior - soaking the brain in several changes of cold water before cooking is what draws out the blood and membrane, without which the poaching liquid turns cloudy and the flavor stays overly strong.",
+    imageEmoji: "🧠",
+    cookTimeMinutes: 45,
+    servings: 4,
+    ingredients: [
+      { text: "1 lb veal brain", ingredient: "veal brain", quantity: 1 },
+      { text: "1 bay leaf", ingredient: "bay leaf", quantity: 1 },
+      { text: "1 tsp black peppercorns", ingredient: "black peppercorns", quantity: 1 },
+      { text: "1 tsp salt (for poaching)", ingredient: "salt", quantity: 1 },
+      { text: "1/2 cup flour", ingredient: "flour", quantity: 0.5 },
+      { text: "2 eggs, beaten", ingredient: "eggs", quantity: 2 },
+      { text: "3 tbsp vegetable oil, for frying", ingredient: "vegetable oil", quantity: 3 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
+    ],
+    steps: [
+      "Soak the brain in a bowl of cold water in the refrigerator for several hours or overnight, changing the water 2-3 times, until the water stays mostly clear - this draws out the blood and outer membrane, without which the poaching liquid turns cloudy and the flavor stays overly strong.",
+      "Carefully peel away any remaining membrane from the surface of the brain.",
+      "Place the brain in a pot of cold water with the bay leaf, peppercorns, and 1 tsp salt. Bring to a gentle boil, then simmer for 15-20 minutes, until firm.",
+      "Drain and let cool completely, then slice into 1/2-inch thick pieces.",
+      "Set up a breading station: flour in one dish and the beaten eggs in another. Dredge each slice in flour, then egg, then flour again, so each piece is fully coated.",
+      "Heat the oil in a skillet over medium heat and fry the slices for 2-3 minutes per side, until the crust is golden and crisp.",
+      "Season with salt and pepper and serve hot.",
+    ],
+    tags: ["dinner"],
+    bg: {
+      title: "Мозък пане",
+      description:
+        "Старомоден български деликатес от епохата на цялостното използване на животното - варен телешки мозък, нарязан и двойно паниран, после запържен в тиган, докато коричката стане златиста и хрупкава около мека, кремообразна вътрешност - накисването на мозъка в няколко смени студена вода преди готвене е това, което изтегля кръвта и мембраната, без което течността за варене помътнява, а вкусът остава прекалено силен.",
+      steps: [
+        "Накиснете мозъка в купа със студена вода в хладилника за няколко часа или през нощта, сменяйки водата 2-3 пъти, докато остане предимно бистра - това изтегля кръвта и външната мембрана, без което течността за варене помътнява, а вкусът остава прекалено силен.",
+        "Внимателно обелете останалата мембрана от повърхността на мозъка.",
+        "Поставете мозъка в тенджера със студена вода с дафиновия лист, черния пипер на зърна и 1 ч.л. сол. Оставете да заври леко, после гответе на слаб огън 15-20 минути, докато се стегне.",
+        "Отцедете и оставете да изстине напълно, после нарежете на парчета с дебелина около 1.25 см.",
+        "Подгответе станция за паниране: брашно в едно блюдо и разбитите яйца в друго. Обваляйте всеки резен в брашно, после в яйце, после отново в брашно, така че всяко парче да е напълно покрито.",
+        "Загрейте олиото в тиган на среден огън и пържете резените по 2-3 минути от всяка страна, докато коричката стане златиста и хрупкава.",
+        "Подправете със сол и пипер и сервирайте горещо.",
+      ],
+      ingredients: [
+        "450 г телешки мозък",
+        "1 дафинов лист",
+        "1 ч.л. черен пипер на зърна",
+        "1 ч.л. сол (за варене)",
+        "1/2 чаша брашно",
+        "2 яйца, разбити",
+        "3 с.л. олио за пържене",
+        "Сол на вкус",
+        "Черен пипер на вкус",
+      ],
+    },
+  },
+  {
+    slug: "pechen-sharan",
+    title: "Pechen Sharan (Bulgarian Stuffed Baked Carp)",
+    description:
+      "The centerpiece of a traditional Bulgarian Christmas Eve table - whole carp stuffed with a meatless filling of rice, walnuts, and raisins, then baked until the skin crisps - fish, not meat, is what makes carp central to Badni Vecher, since Christmas Eve falls within the pre-Christmas fast and fish is the one animal protein still allowed; the walnut-raisin rice filling is the same base used in Bulgaria's other Lenten dishes.",
+    imageEmoji: "🐟",
+    cookTimeMinutes: 75,
+    servings: 6,
+    ingredients: [
+      { text: "1 whole carp (3-4 lb), cleaned and scaled", ingredient: "carp", quantity: 1 },
+      { text: "1/2 cup rice", ingredient: "rice", quantity: 0.5 },
+      { text: "1 onion, finely chopped", ingredient: "onion", quantity: 1 },
+      { text: "1/2 cup walnuts, chopped", ingredient: "walnuts", quantity: 0.5 },
+      { text: "1/4 cup raisins", ingredient: "raisins", quantity: 0.25 },
+      { text: "1/4 cup vegetable oil, divided", ingredient: "vegetable oil", quantity: 0.25 },
+      { text: "1 tomato, diced", ingredient: "tomato", quantity: 1 },
+      { text: "2 tbsp parsley, chopped", ingredient: "parsley", quantity: 2 },
+      { text: "1 lemon, sliced", ingredient: "lemon", quantity: 1 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
+    ],
+    steps: [
+      "Cook the rice in salted water until just barely tender, about 10 minutes, then drain - it will finish cooking inside the fish as it bakes.",
+      "Heat half the oil in a pan and sauté the onion for 5 minutes, until softened. Stir in the walnuts, raisins, diced tomato, and parsley, and cook for 2-3 minutes more.",
+      "Mix the cooked rice into the onion mixture, and season with salt and pepper - this walnut-raisin rice filling is the same meatless base used across Bulgaria's other Lenten dishes, since Christmas Eve falls within the pre-Christmas fast.",
+      "Rinse the carp inside and out and pat dry. Season the cavity with salt and pepper.",
+      "Preheat the oven to 375°F. Stuff the carp generously with the rice filling, securing the opening closed with toothpicks or kitchen twine if needed.",
+      "Place the stuffed carp in a greased baking dish, drizzle with the remaining oil, and tuck the lemon slices over and around the fish.",
+      "Bake for 45-55 minutes, basting once or twice with the pan juices, until the skin is crisp and the fish flakes easily at the thickest part.",
+      "Let rest for 5 minutes before serving, spooning some of the stuffing alongside each portion.",
+    ],
+    tags: ["dinner"],
+    bg: {
+      title: "Печен шаран",
+      description:
+        "Централното ястие на традиционната българска трапеза за Бъдни вечер - цял шаран, пълнен с безмесен пълнеж от ориз, орехи и стафиди, после изпечен, докато кожата захрупне - рибата, не месото, е това, което прави шарана централен за Бъдни вечер, тъй като тя пада в периода на предколедния пост, а рибата е единственият животински протеин, все още позволен; оризовият пълнеж с орехи и стафиди е същата основа, използвана в другите постни български ястия.",
+      steps: [
+        "Сварете ориза в подсолена вода, докато точно омекне, около 10 минути, после отцедете - той ще се доготви вътре в рибата, докато се пече.",
+        "Загрейте половината от олиото в тиган и запържете лука 5 минути, докато омекне. Разбъркайте орехите, стафидите, нарязания домат и магданоза, и гответе още 2-3 минути.",
+        "Смесете сварения ориз в луковата смес, и подправете със сол и пипер - този пълнеж от ориз с орехи и стафиди е същата безмесна основа, използвана в другите постни български ястия, тъй като Бъдни вечер пада в периода на предколедния пост.",
+        "Изплакнете шарана отвътре и отвън и подсушете. Подправете кухината със сол и пипер.",
+        "Загрейте фурната на 190°C. Напълнете шарана щедро с оризовия пълнеж, затваряйки отвора с клечки за зъби или кухненски конец, ако е нужно.",
+        "Поставете пълнения шаран в намазана тава за печене, полейте с останалото олио, и наредете резените лимон върху и около рибата.",
+        "Печете 45-55 минути, поливайки веднъж-два пъти със сока от тавата, докато кожата захрупне, а рибата лесно се разлюспи в най-дебелата част.",
+        "Оставете да почине 5 минути преди сервиране, добавяйки малко от пълнежа към всяка порция.",
+      ],
+      ingredients: [
+        "1 цял шаран (1.4-1.8 кг), почистен и с премахнати люспи",
+        "1/2 чаша ориз",
+        "1 лук, ситно нарязан",
+        "1/2 чаша орехи, нарязани",
+        "1/4 чаша стафиди",
+        "1/4 чаша олио, разделено",
+        "1 домат, нарязан на кубчета",
+        "2 с.л. магданоз, нарязан",
+        "1 лимон, нарязан на резени",
+        "Сол на вкус",
+        "Черен пипер на вкус",
+      ],
+    },
+  },
+  {
+    slug: "domashno-sirene",
+    title: "Domashno Sirene (Homemade Bulgarian White Cheese)",
+    description:
+      "The white brined cheese behind nearly every Bulgarian salad and pastry, made at home from milk set with rennet, then cut, drained, and cured in its own salted whey - cutting the set curd into small cubes and letting it drain slowly, rather than pressing it hard and fast, is what gives real sirene its soft, slightly crumbly texture instead of a dense, rubbery block.",
+    imageEmoji: "🧀",
+    cookTimeMinutes: 90,
+    servings: 8,
+    ingredients: [
+      { text: "1 gallon whole milk", ingredient: "milk", quantity: 1 },
+      { text: "1/4 tsp liquid rennet, diluted in 1/4 cup cool water", ingredient: "rennet", quantity: 0.25 },
+      { text: "1/4 cup salt (for the curd)", ingredient: "salt", quantity: 0.25 },
+      { text: "1/2 cup salt (for the brine)", ingredient: "salt", quantity: 0.5 },
+      { text: "4 cups water (for the brine)", ingredient: "water", quantity: 4 },
+    ],
+    steps: [
+      "Warm the milk gently in a large pot to about 90°F, stirring occasionally so it heats evenly without scorching.",
+      "Remove from the heat and stir in the diluted rennet with a gentle up-and-down motion for about 30 seconds.",
+      "Cover and let sit undisturbed at room temperature for 45-60 minutes, until the milk sets into a solid curd that pulls cleanly away from the sides of the pot when tilted.",
+      "Cut the curd into small, roughly 1/2-inch cubes with a long knife, cutting straight down in a grid pattern, then let it rest for 10 minutes - cutting it into small cubes and letting it rest, rather than breaking it up roughly, is what gives sirene its soft, slightly crumbly texture.",
+      "Line a colander with cheesecloth and gently ladle the curds into it, letting the whey drain off for about 1 hour. Reserve the drained whey.",
+      "Sprinkle the 1/4 cup salt evenly over the curds, then gather the cheesecloth and tie it into a bundle. Hang it to drain for another 1-2 hours, or press it lightly under a light weight.",
+      "Unwrap the cheese and cut into blocks. Dissolve the 1/2 cup salt in the 4 cups water (or use the reserved whey instead) to make a brine.",
+      "Submerge the cheese blocks in the brine, cover, and refrigerate for at least 3-4 days before eating - this curing time in the brine is what develops sirene's characteristic tang. It will keep for weeks stored in the brine in the refrigerator.",
+    ],
+    tags: ["snack", "vegetarian"],
+    bg: {
+      title: "Домашно сирене",
+      description:
+        "Бялото саламурено сирене зад почти всяка българска салата и баница, направено у дома от мляко, стегнато с мая (сирище), после нарязано, отцедено и зреещо в собствената си подсолена суроватка - нарязването на стегнатата извара на малки кубчета и оставянето ѝ да се отцеди бавно, вместо да се пресова силно и бързо, е това, което дава на истинското сирене неговата мека, леко ронлива текстура, вместо плътен, гумен блок.",
+      steps: [
+        "Загрейте млякото внимателно в голяма тенджера до около 32°C, разбърквайки от време на време, за да се загрее равномерно, без да загори.",
+        "Свалете от котлона и разбъркайте разреденото сирище с леко движение нагоре-надолу за около 30 секунди.",
+        "Покрийте и оставете да престои необезпокоявано на стайна температура 45-60 минути, докато млякото се стегне в плътна извара, която чисто се отделя от стените на тенджерата при накланяне.",
+        "Нарежете изварата на малки кубчета с размер около 1.25 см с дълъг нож, режейки право надолу в мрежа, после оставете да престои 10 минути - нарязването на малки кубчета и оставянето да престои, вместо грубо разчупване, е това, което дава на сиренето неговата мека, леко ронлива текстура.",
+        "Постелете цедка с марля и внимателно прехвърлете изварата в нея с черпак, оставяйки суроватката да се отцеди около 1 час. Запазете отцедената суроватка.",
+        "Поръсете 1/4 чаша сол равномерно върху изварата, после съберете марлята и я завържете на вързоп. Окачете да се отцеди още 1-2 часа, или притиснете леко под лек товар.",
+        "Разопаковайте сиренето и нарежете на блокчета. Разтворете 1/2 чаша сол в 4-те чаши вода (или използвайте запазената суроватка вместо това), за да направите саламура.",
+        "Потопете блокчетата сирене в саламурата, покрийте, и охладете в хладилника поне 3-4 дни преди ядене - това време за зреене в саламурата е това, което развива характерната киселост на сиренето. Ще се запази седмици, съхранявано в саламурата в хладилника.",
+      ],
+      ingredients: [
+        "3.8 л пълномаслено мляко",
+        "1/4 ч.л. течно сирище, разредено в 1/4 чаша хладка вода",
+        "1/4 чаша сол (за изварата)",
+        "1/2 чаша сол (за саламурата)",
+        "4 чаши вода (за саламурата)",
+      ],
+    },
+  },
+  {
+    slug: "drobcheta-s-yaytsa",
+    title: "Drobcheta s Yaytsa (Bulgarian Chicken Livers with Eggs)",
+    description:
+      "A quick, iron-rich Bulgarian breakfast or light dinner of floured chicken livers pan-fried until just cooked through, then finished with eggs scrambled directly in the same pan - cooking the livers only until they're still faintly pink in the center, rather than all the way through, is what keeps them tender instead of turning grainy and tough.",
+    imageEmoji: "🍳",
+    cookTimeMinutes: 20,
+    servings: 2,
+    ingredients: [
+      { text: "1/2 lb chicken livers, trimmed and cut into pieces", ingredient: "chicken liver", quantity: 0.5 },
+      { text: "3 tbsp flour", ingredient: "flour", quantity: 3 },
+      { text: "3 tbsp vegetable oil", ingredient: "vegetable oil", quantity: 3 },
+      { text: "1 onion, finely chopped", ingredient: "onion", quantity: 1 },
+      { text: "4 eggs", ingredient: "eggs", quantity: 4 },
+      { text: "1/2 tsp paprika", ingredient: "paprika", quantity: 0.5 },
+      { text: "2 tbsp parsley, chopped", ingredient: "parsley", quantity: 2 },
+      { text: "Salt to taste", ingredient: "salt", quantity: null },
+      { text: "Pepper to taste", ingredient: "pepper", quantity: null },
+    ],
+    steps: [
+      "Pat the chicken livers dry, season with salt and pepper, and dredge lightly in the flour, shaking off the excess.",
+      "Heat the oil in a skillet over medium-high heat and sauté the onion for 3-4 minutes, until softened.",
+      "Add the floured livers and cook for 3-4 minutes, turning occasionally, until browned on the outside but still faintly pink in the center - cooking them only to this point, rather than all the way through, is what keeps the livers tender instead of turning grainy and tough.",
+      "Sprinkle the paprika over the livers and stir to coat.",
+      "Reduce the heat to low, crack the eggs directly into the pan among the livers, and season with a little more salt and pepper.",
+      "Gently scramble the eggs together with the livers for 2-3 minutes, until the eggs are just set but still soft.",
+      "Sprinkle with parsley and serve immediately with bread.",
+    ],
+    tags: ["breakfast", "quick"],
+    bg: {
+      title: "Дробчета с яйца",
+      description:
+        "Бърза, богата на желязо българска закуска или лека вечеря от овалени в брашно пилешки дробчета, запържени точно до готовност, после довършени с яйца, разбъркани направо в същия тиган - готвенето на дробчетата само докато останат едва розови в центъра, вместо напълно, е това, което ги пази крехки, вместо да станат зърнести и жилави.",
+      steps: [
+        "Подсушете пилешките дробчета, подправете със сол и пипер, и овалайте леко в брашното, изтръсквайки излишъка.",
+        "Загрейте олиото в тиган на среден-силен огън и запържете лука 3-4 минути, докато омекне.",
+        "Добавете овалените дробчета и гответе 3-4 минути, обръщайки от време на време, докато се зачервят отвън, но останат едва розови в центъра - готвенето им само дотук, вместо напълно, е това, което пази дробчетата крехки, вместо да станат зърнести и жилави.",
+        "Поръсете червения пипер върху дробчетата и разбъркайте, за да ги покриете.",
+        "Намалете огъня на слаб, счупете яйцата директно в тигана сред дробчетата, и подправете с още малко сол и пипер.",
+        "Разбърквайте леко яйцата заедно с дробчетата 2-3 минути, докато яйцата точно се стегнат, но останат меки.",
+        "Поръсете с магданоз и сервирайте веднага с хляб.",
+      ],
+      ingredients: [
+        "225 г пилешки дробчета, почистени и нарязани на парчета",
+        "3 с.л. брашно",
+        "3 с.л. олио",
+        "1 лук, ситно нарязан",
+        "4 яйца",
+        "1/2 ч.л. червен пипер",
+        "2 с.л. магданоз, нарязан",
+        "Сол на вкус",
+        "Черен пипер на вкус",
+      ],
+    },
+  },
+];
+
+async function main() {
+  for (const recipe of newRecipes) {
+    const created = await prisma.recipe.create({
+      data: {
+        slug: recipe.slug,
+        title: recipe.title,
+        description: recipe.description,
+        imageEmoji: recipe.imageEmoji,
+        cookTimeMinutes: recipe.cookTimeMinutes,
+        servings: recipe.servings,
+        steps: JSON.stringify(recipe.steps),
+        tags: JSON.stringify(recipe.tags),
+      },
+    });
+
+    for (let i = 0; i < recipe.ingredients.length; i++) {
+      const { text, ingredient, quantity } = recipe.ingredients[i];
+      const ingredientRow = await prisma.ingredient.upsert({
+        where: { name: ingredient },
+        update: {},
+        create: { name: ingredient },
+      });
+      await prisma.recipeIngredient.create({
+        data: {
+          recipeId: created.id,
+          ingredientId: ingredientRow.id,
+          displayText: text,
+          quantity,
+          position: i,
+        },
+      });
+    }
+    console.log(`Created ${recipe.slug}`);
+  }
+  console.log(`Created ${newRecipes.length} recipes total.`);
+
+  // runTranslations disconnects prisma when done, so it must run last.
+  await runTranslations(newRecipes.map((r) => ({ slug: r.slug, ...r.bg })));
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

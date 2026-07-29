@@ -92,6 +92,15 @@ export default async function RecipePage({
       text: step,
     })),
     keywords: recipe.tags.join(", "),
+    ...(recipe.nutrition && {
+      nutrition: {
+        "@type": "NutritionInformation",
+        calories: `${recipe.nutrition.caloriesPerServing} calories`,
+        proteinContent: `${recipe.nutrition.proteinG}g`,
+        carbohydrateContent: `${recipe.nutrition.carbsG}g`,
+        fatContent: `${recipe.nutrition.fatG}g`,
+      },
+    }),
     ...(ratingSummary.count > 0 && {
       aggregateRating: {
         "@type": "AggregateRating",
@@ -157,6 +166,31 @@ export default async function RecipePage({
           </span>
         ))}
       </div>
+
+      {recipe.nutrition && (
+        <div className="mb-10">
+          <h2 className="font-semibold mb-1">{strings.nutrition}</h2>
+          <p className="text-xs opacity-50 mb-3">{strings.nutritionEstimated}</p>
+          <div className="flex flex-wrap gap-6 text-sm">
+            <span>
+              <span className="font-medium">{recipe.nutrition.caloriesPerServing}</span>{" "}
+              <span className="opacity-70">{strings.calories}</span>
+            </span>
+            <span>
+              <span className="font-medium">{recipe.nutrition.proteinG}g</span>{" "}
+              <span className="opacity-70">{strings.protein}</span>
+            </span>
+            <span>
+              <span className="font-medium">{recipe.nutrition.carbsG}g</span>{" "}
+              <span className="opacity-70">{strings.carbs}</span>
+            </span>
+            <span>
+              <span className="font-medium">{recipe.nutrition.fatG}g</span>{" "}
+              <span className="opacity-70">{strings.fat}</span>
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         <section className="sm:col-span-1">

@@ -24,9 +24,19 @@ export type RecipeSummary = {
   ingredientEntries: IngredientEntry[];
 };
 
+export type NutritionInfo = {
+  caloriesPerServing: number;
+  proteinG: number;
+  carbsG: number;
+  fatG: number;
+};
+
 export type RecipeDetail = RecipeSummary & {
   ingredients: string[];
   steps: string[];
+  // Null until this recipe has been through a nutrition-estimate batch -
+  // always LLM-estimated from ingredients/servings, never lab-measured.
+  nutrition: NutritionInfo | null;
 };
 
 function parseJsonArray(raw: string): string[] {
@@ -102,6 +112,15 @@ export const getRecipeBySlug = cache(async function getRecipeBySlug(
     })),
     steps: translation?.steps ? parseJsonArray(translation.steps) : parseJsonArray(r.steps),
     tags: parseJsonArray(r.tags),
+    nutrition:
+      r.caloriesPerServing != null && r.proteinG != null && r.carbsG != null && r.fatG != null
+        ? {
+            caloriesPerServing: r.caloriesPerServing,
+            proteinG: r.proteinG,
+            carbsG: r.carbsG,
+            fatG: r.fatG,
+          }
+        : null,
   };
 });
 
