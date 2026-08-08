@@ -22,6 +22,10 @@ export function RecipeBrowser({
   const [ingredientTags, setIngredientTags] = useState<string[]>([]);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [maxTime, setMaxTime] = useState<number | null>(null);
+  const [tagsExpanded, setTagsExpanded] = useState(false);
+
+  const TAG_PREVIEW_COUNT = 7;
+  const visibleTags = tagsExpanded ? allTags : allTags.slice(0, TAG_PREVIEW_COUNT);
 
   // The text currently being typed counts as a search term too, so results
   // still filter live as you type (matching the old single-ingredient
@@ -184,7 +188,7 @@ export function RecipeBrowser({
         >
           {strings.allTag}
         </button>
-        {allTags.map((tag) => (
+        {visibleTags.map((tag) => (
           <button
             key={tag}
             onClick={() => setActiveTag(tag === activeTag ? null : tag)}
@@ -197,6 +201,14 @@ export function RecipeBrowser({
             {tagLabel(locale, tag)}
           </button>
         ))}
+        {allTags.length > TAG_PREVIEW_COUNT && (
+          <button
+            onClick={() => setTagsExpanded((prev) => !prev)}
+            className="rounded-full px-3 py-1 text-xs font-medium border border-dashed border-black/20 dark:border-white/25 opacity-70 hover:opacity-100 transition-opacity"
+          >
+            {tagsExpanded ? strings.showLessTags : strings.showMoreTags}
+          </button>
+        )}
       </div>
 
       {!hasActiveFilters && (
