@@ -1,11 +1,11 @@
-import { getAllRecipes, getAllTags } from "@/lib/recipes";
+import { getAllRecipesLight, getAllTags } from "@/lib/recipes";
 import { getLocale } from "@/lib/locale";
 import { t } from "@/lib/i18n";
 import { RecipeBrowser } from "@/components/RecipeBrowser";
 
 export default async function Home() {
   const locale = await getLocale();
-  const [recipes, tags] = await Promise.all([getAllRecipes(locale), getAllTags()]);
+  const [recipes, tags] = await Promise.all([getAllRecipesLight(locale), getAllTags()]);
   const strings = t(locale);
 
   return (

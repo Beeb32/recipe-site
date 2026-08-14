@@ -3,13 +3,20 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import type { Locale } from "@/lib/locale";
+import { ingredientNameMatches } from "@/lib/ingredientMatch";
 
 export type IngredientEntry = {
   name: string;
   quantity: number | null;
 };
 
-export type RecipeSummary = {
+// Everything the homepage's recipe cards + name/tag/time filters need, and
+// nothing more - deliberately excludes ingredientEntries, which is the
+// single biggest contributor to page weight (every ingredient of every
+// recipe). Ingredient search is served separately, on demand, via
+// searchRecipesByIngredients instead of shipping the full ingredient index
+// to the client on every page load.
+export type RecipeCardData = {
   id: string;
   slug: string;
   title: string;
@@ -19,6 +26,9 @@ export type RecipeSummary = {
   servings: number;
   tags: string[];
   createdAt: Date;
+};
+
+export type RecipeSummary = RecipeCardData & {
   // Canonical ingredient names + quantity used (e.g. "red pepper", 2) - what
   // ingredient-based search matches and ranks against, separate from the
   // display text shown on the page.
@@ -76,10 +86,38 @@ export const getAllRecipes = unstable_cache(
     });
   },
   ["getAllRecipes"],
-  // 5 minutes - the homepage's recipe+ingredient join is the single most
-  // expensive query on the site (fetches all recipes on every load), so
-  // caching it turns near-every homepage visit into a cache hit instead of
-  // re-running the full join every time.
+  { revalidate: 300 },
+);
+
+// Same recipe list as getAllRecipes but without the ingredient join or
+// per-recipe ingredientEntries - what the homepage actually needs for
+// cards plus name/tag/time filtering. Skipping the ingredient join here
+// both shrinks the query and, more importantly, shrinks the payload
+// shipped to and hydrated by the client on every single page load.
+export const getAllRecipesLight = unstable_cache(
+  async (locale: Locale = "en"): Promise<RecipeCardData[]> => {
+    const recipes = await prisma.recipe.findMany({
+      orderBy: { title: "asc" },
+      include: {
+        translations: { where: { locale } },
+      },
+    });
+    return recipes.map((r) => {
+      const translation = r.translations[0];
+      return {
+        id: r.id,
+        slug: r.slug,
+        title: translation?.title ?? r.title,
+        description: translation?.description ?? r.description,
+        imageEmoji: r.imageEmoji,
+        cookTimeMinutes: r.cookTimeMinutes,
+        servings: r.servings,
+        tags: parseJsonArray(r.tags),
+        createdAt: r.createdAt,
+      };
+    });
+  },
+  ["getAllRecipesLight"],
   { revalidate: 300 },
 );
 
@@ -161,4 +199,62 @@ export async function getAllIngredientNames(): Promise<string[]> {
     orderBy: { name: "asc" },
   });
   return ingredients.map((i) => i.name);
+}
+
+// Slug + ingredient names/quantities only, for ingredient-based search -
+// the lean counterpart to getAllRecipesLight's title/description/tags.
+// Cached separately since it's only ever needed once a user actually
+// searches by ingredient, not on every homepage load.
+const getIngredientIndex = unstable_cache(
+  async (): Promise<{ slug: string; ingredientEntries: IngredientEntry[] }[]> => {
+    const recipes = await prisma.recipe.findMany({
+      select: {
+        slug: true,
+        recipeIngredients: { select: { quantity: true, ingredient: { select: { name: true } } } },
+      },
+    });
+    return recipes.map((r) => ({
+      slug: r.slug,
+      ingredientEntries: r.recipeIngredients.map((ri) => ({
+        name: ri.ingredient.name,
+        quantity: ri.quantity,
+      })),
+    }));
+  },
+  ["getIngredientIndex"],
+  { revalidate: 300 },
+);
+
+// Mirrors RecipeBrowser's old client-side matching/ranking exactly (every
+// tag must match - AND, not OR - ranked by total matched quantity), just
+// run server-side over the lean ingredient index instead of shipping that
+// index to every visitor.
+export async function searchRecipesByIngredients(tags: string[]): Promise<{ slug: string; rank: number }[]> {
+  if (tags.length === 0) return [];
+  const index = await getIngredientIndex();
+
+  const results: { slug: string; rank: number }[] = [];
+  for (const r of index) {
+    let rank = 0;
+    let matchesAll = true;
+    for (const tag of tags) {
+      let best: number | null = null;
+      for (const entry of r.ingredientEntries) {
+        if (ingredientNameMatches(entry.name, tag)) {
+          if (entry.quantity !== null && (best === null || entry.quantity > best)) {
+            best = entry.quantity;
+          } else if (best === null) {
+            best = 0;
+          }
+        }
+      }
+      if (best === null) {
+        matchesAll = false;
+        break;
+      }
+      rank += best;
+    }
+    if (matchesAll) results.push({ slug: r.slug, rank });
+  }
+  return results;
 }

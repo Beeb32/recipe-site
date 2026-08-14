@@ -1,9 +1,9 @@
 import Link from "next/link";
-import type { RecipeSummary } from "@/lib/recipes";
+import type { RecipeCardData } from "@/lib/recipes";
 import type { Locale } from "@/lib/locale";
 import { t } from "@/lib/i18n";
 
-export function RecipeCard({ recipe, locale = "en" }: { recipe: RecipeSummary; locale?: Locale }) {
+export function RecipeCard({ recipe, locale = "en" }: { recipe: RecipeCardData; locale?: Locale }) {
   const strings = t(locale);
   return (
     <Link
