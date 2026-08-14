@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import type { Locale } from "@/lib/locale";
 
@@ -46,33 +47,41 @@ function parseJsonArray(raw: string): string[] {
 // Translation rows only ever exist for non-English locales, so requesting
 // them filtered by "en" naturally returns nothing and every field falls
 // back to the original column - no need to special-case locale === "en".
-export async function getAllRecipes(locale: Locale = "en"): Promise<RecipeSummary[]> {
-  const recipes = await prisma.recipe.findMany({
-    orderBy: { title: "asc" },
-    include: {
-      recipeIngredients: { include: { ingredient: true } },
-      translations: { where: { locale } },
-    },
-  });
-  return recipes.map((r) => {
-    const translation = r.translations[0];
-    return {
-      id: r.id,
-      slug: r.slug,
-      title: translation?.title ?? r.title,
-      description: translation?.description ?? r.description,
-      imageEmoji: r.imageEmoji,
-      cookTimeMinutes: r.cookTimeMinutes,
-      servings: r.servings,
-      tags: parseJsonArray(r.tags),
-      createdAt: r.createdAt,
-      ingredientEntries: r.recipeIngredients.map((ri) => ({
-        name: ri.ingredient.name,
-        quantity: ri.quantity,
-      })),
-    };
-  });
-}
+export const getAllRecipes = unstable_cache(
+  async (locale: Locale = "en"): Promise<RecipeSummary[]> => {
+    const recipes = await prisma.recipe.findMany({
+      orderBy: { title: "asc" },
+      include: {
+        recipeIngredients: { include: { ingredient: true } },
+        translations: { where: { locale } },
+      },
+    });
+    return recipes.map((r) => {
+      const translation = r.translations[0];
+      return {
+        id: r.id,
+        slug: r.slug,
+        title: translation?.title ?? r.title,
+        description: translation?.description ?? r.description,
+        imageEmoji: r.imageEmoji,
+        cookTimeMinutes: r.cookTimeMinutes,
+        servings: r.servings,
+        tags: parseJsonArray(r.tags),
+        createdAt: r.createdAt,
+        ingredientEntries: r.recipeIngredients.map((ri) => ({
+          name: ri.ingredient.name,
+          quantity: ri.quantity,
+        })),
+      };
+    });
+  },
+  ["getAllRecipes"],
+  // 5 minutes - the homepage's recipe+ingredient join is the single most
+  // expensive query on the site (fetches all recipes on every load), so
+  // caching it turns near-every homepage visit into a cache hit instead of
+  // re-running the full join every time.
+  { revalidate: 300 },
+);
 
 // Wrapped in React's cache() so generateMetadata and the page component
 // (which both need the same recipe) share one DB call per request instead
@@ -133,14 +142,18 @@ export async function getAllRecipeSlugs(): Promise<{ slug: string; createdAt: Da
   });
 }
 
-export async function getAllTags(): Promise<string[]> {
-  const recipes = await prisma.recipe.findMany({ select: { tags: true } });
-  const tagSet = new Set<string>();
-  for (const r of recipes) {
-    for (const tag of parseJsonArray(r.tags)) tagSet.add(tag);
-  }
-  return Array.from(tagSet).sort();
-}
+export const getAllTags = unstable_cache(
+  async (): Promise<string[]> => {
+    const recipes = await prisma.recipe.findMany({ select: { tags: true } });
+    const tagSet = new Set<string>();
+    for (const r of recipes) {
+      for (const tag of parseJsonArray(r.tags)) tagSet.add(tag);
+    }
+    return Array.from(tagSet).sort();
+  },
+  ["getAllTags"],
+  { revalidate: 300 },
+);
 
 export async function getAllIngredientNames(): Promise<string[]> {
   const ingredients = await prisma.ingredient.findMany({
