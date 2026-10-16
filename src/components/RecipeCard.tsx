@@ -16,6 +16,9 @@ export function RecipeCard({ recipe, locale = "en" }: { recipe: RecipeCardData; 
       <div className="flex items-center gap-3 text-xs opacity-60">
         <span>⏱ {recipe.cookTimeMinutes} {strings.min}</span>
         <span>🍽 {recipe.servings} {strings.servings}</span>
+        {recipe.caloriesPerServing != null && (
+          <span title={strings.estimatedNutrition}>🔥 {recipe.caloriesPerServing} {strings.kcal}</span>
+        )}
       </div>
     </Link>
   );

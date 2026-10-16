@@ -42,6 +42,8 @@ export async function getFavoriteRecipesForUser(
       servings: r.servings,
       tags: parseTags(r.tags),
       createdAt: r.createdAt,
+      caloriesPerServing: r.caloriesPerServing,
+      proteinG: r.proteinG,
       ingredientEntries: r.recipeIngredients.map((ri) => ({
         name: ri.ingredient.name,
         quantity: ri.quantity,

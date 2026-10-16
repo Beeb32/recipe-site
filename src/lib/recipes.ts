@@ -26,6 +26,9 @@ export type RecipeCardData = {
   servings: number;
   tags: string[];
   createdAt: Date;
+  // Estimated per serving (null = not estimated yet). Drives the calorie / protein filters.
+  caloriesPerServing: number | null;
+  proteinG: number | null;
 };
 
 export type RecipeSummary = RecipeCardData & {
@@ -78,6 +81,8 @@ export const getAllRecipes = unstable_cache(
         servings: r.servings,
         tags: parseJsonArray(r.tags),
         createdAt: r.createdAt,
+        caloriesPerServing: r.caloriesPerServing,
+        proteinG: r.proteinG,
         ingredientEntries: r.recipeIngredients.map((ri) => ({
           name: ri.ingredient.name,
           quantity: ri.quantity,
@@ -114,6 +119,8 @@ export const getAllRecipesLight = unstable_cache(
         servings: r.servings,
         tags: parseJsonArray(r.tags),
         createdAt: r.createdAt,
+        caloriesPerServing: r.caloriesPerServing,
+        proteinG: r.proteinG,
       };
     });
   },
@@ -152,6 +159,8 @@ export const getRecipeBySlug = cache(async function getRecipeBySlug(
     cookTimeMinutes: r.cookTimeMinutes,
     servings: r.servings,
     createdAt: r.createdAt,
+    caloriesPerServing: r.caloriesPerServing,
+    proteinG: r.proteinG,
     ingredients: r.recipeIngredients.map((ri) => ri.translations[0]?.displayText ?? ri.displayText),
     ingredientEntries: r.recipeIngredients.map((ri) => ({
       name: ri.ingredient.name,
