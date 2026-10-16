@@ -158,7 +158,9 @@ export function RecipeBrowser({
 
   return (
     <div>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div className="flex flex-col gap-3 mb-6">
+      {/* Line 1: the original search row (name, ingredient, cook time) */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
           <input
             type="text"
@@ -199,7 +201,6 @@ export function RecipeBrowser({
             )}
           </div>
         </div>
-        <div className="flex flex-wrap gap-3">
         <select
           value={maxTime ?? ""}
           onChange={(e) => setMaxTime(e.target.value ? Number(e.target.value) : null)}
@@ -210,6 +211,9 @@ export function RecipeBrowser({
           <option value="30">{strings.thirtyMinOrLess}</option>
           <option value="60">{strings.oneHourOrLess}</option>
         </select>
+      </div>
+      {/* Line 2: the nutrition filters */}
+      <div className="flex flex-wrap gap-3">
         <select
           value={maxCalories ?? ""}
           onChange={(e) => setMaxCalories(e.target.value ? Number(e.target.value) : null)}
@@ -234,7 +238,7 @@ export function RecipeBrowser({
             <option key={n} value={n}>{strings.proteinAtLeast(n)}</option>
           ))}
         </select>
-        </div>
+      </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-8">
