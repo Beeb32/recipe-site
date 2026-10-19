@@ -1,3 +1,5 @@
+import { DishMedia } from "@/components/DishMedia";
+import { recipeImageSrc } from "@/lib/recipeImages";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -116,33 +118,41 @@ export default async function RecipePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex items-start justify-between gap-4">
-        <div className="text-6xl mb-4">{recipe.imageEmoji}</div>
-        {user ? (
-          <form action={toggleAction}>
-            <button
-              type="submit"
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                favorited
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-black/10 dark:border-white/15 hover:border-black/30 dark:hover:border-white/30"
-              }`}
-            >
-              {favorited ? strings.saved : strings.save}
-            </button>
-          </form>
-        ) : (
-          <Link href="/login" className="text-sm underline underline-offset-2 opacity-70 mt-2">
-            {strings.logInToSave}
-          </Link>
-        )}
+      <div className={`group relative overflow-hidden rounded-3xl border border-black/10 dark:border-white/10 mb-6 ${recipeImageSrc(recipe.slug, "hero") ? "aspect-[16/10] sm:aspect-[2/1]" : "h-36 sm:h-44"}`}>
+        <DishMedia slug={recipe.slug} emoji={recipe.imageEmoji} title={recipe.title} kind="hero" priority sizes="(min-width: 768px) 768px, 100vw" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
+        <div className="absolute right-3 top-3">
+          {user ? (
+            <form action={toggleAction}>
+              <button
+                type="submit"
+                className={`rounded-full px-4 py-2 text-sm font-medium backdrop-blur transition-colors ${
+                  favorited
+                    ? "bg-accent text-black"
+                    : "bg-black/55 text-white hover:bg-black/70"
+                }`}
+              >
+                {favorited ? strings.saved : strings.save}
+              </button>
+            </form>
+          ) : (
+            <Link href="/login" className="rounded-full bg-black/55 text-white backdrop-blur px-4 py-2 text-sm hover:bg-black/70 transition-colors">
+              {strings.logInToSave}
+            </Link>
+          )}
+        </div>
       </div>
-      <h1 className="text-3xl font-semibold tracking-tight mb-2">{recipe.title}</h1>
-      <p className="opacity-70 mb-4">{recipe.description}</p>
+      <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-2">{recipe.title}</h1>
+      <p className="opacity-70 mb-5 leading-relaxed">{recipe.description}</p>
 
-      <div className="flex items-center gap-4 text-sm opacity-70 mb-4">
-        <span>⏱ {recipe.cookTimeMinutes} {strings.min}</span>
-        <span>🍽 {recipe.servings} {strings.servings}</span>
+      <div className="flex flex-wrap gap-2 text-sm mb-5">
+        <span className="rounded-full border border-black/10 dark:border-white/15 px-3.5 py-1.5">⏱ {recipe.cookTimeMinutes} {strings.min}</span>
+        <span className="rounded-full border border-black/10 dark:border-white/15 px-3.5 py-1.5">🍽 {recipe.servings} {strings.servings}</span>
+        {recipe.nutrition && (
+          <span title={strings.nutritionEstimated} className="rounded-full border border-black/10 dark:border-white/15 px-3.5 py-1.5">
+            🔥 {recipe.nutrition.caloriesPerServing} {strings.kcal}
+          </span>
+        )}
       </div>
 
       <div className="mb-6">
@@ -171,29 +181,24 @@ export default async function RecipePage({
         <div className="mb-10">
           <h2 className="font-semibold mb-1">{strings.nutrition}</h2>
           <p className="text-xs opacity-50 mb-3">{strings.nutritionEstimated}</p>
-          <div className="flex flex-wrap gap-6 text-sm">
-            <span>
-              <span className="font-medium">{recipe.nutrition.caloriesPerServing}</span>{" "}
-              <span className="opacity-70">{strings.calories}</span>
-            </span>
-            <span>
-              <span className="font-medium">{recipe.nutrition.proteinG}g</span>{" "}
-              <span className="opacity-70">{strings.protein}</span>
-            </span>
-            <span>
-              <span className="font-medium">{recipe.nutrition.carbsG}g</span>{" "}
-              <span className="opacity-70">{strings.carbs}</span>
-            </span>
-            <span>
-              <span className="font-medium">{recipe.nutrition.fatG}g</span>{" "}
-              <span className="opacity-70">{strings.fat}</span>
-            </span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              [recipe.nutrition.caloriesPerServing, strings.calories],
+              [`${recipe.nutrition.proteinG}g`, strings.protein],
+              [`${recipe.nutrition.carbsG}g`, strings.carbs],
+              [`${recipe.nutrition.fatG}g`, strings.fat],
+            ].map(([value, label]) => (
+              <div key={String(label)} className="rounded-2xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.03] px-4 py-3">
+                <div className="text-xl font-semibold text-accent">{value}</div>
+                <div className="text-xs opacity-60">{label}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-        <section className="sm:col-span-1">
+        <section className="sm:col-span-1 sm:sticky sm:top-24 sm:self-start rounded-2xl border border-black/10 dark:border-white/10 p-5">
           <h2 className="font-semibold mb-3">{strings.ingredients}</h2>
           <ul className="space-y-2 text-sm">
             {recipe.ingredients.map((item, i) => (

@@ -6,6 +6,7 @@ import type { RecipeSummary } from "@/lib/recipes";
 import type { Locale } from "@/lib/locale";
 import { t } from "@/lib/i18n";
 import { ingredientNameMatches } from "@/lib/ingredientMatch";
+import { DishMedia } from "@/components/DishMedia";
 
 // Capped so the wheel stays readable - an ingredient like "chicken" can
 // match 50+ recipes, which would make individual slices too thin to see or
@@ -23,6 +24,11 @@ const SLICE_COLORS = [
   "#ec4899",
   "#ef4444",
 ];
+
+// One-tap starting points shown under the search box, and the decorative wheel
+// shown before any search (so the page never opens on an empty black screen).
+const SUGGESTIONS = ["chicken", "potato", "cheese", "rice", "tomato", "egg"];
+const IDLE_EMOJI = ["🍝", "🍲", "🥗", "🍛", "🍳", "🥘", "🍜", "🌮"];
 
 function pickRandomSample<T>(items: T[], count: number): T[] {
   const shuffled = [...items];
@@ -45,8 +51,9 @@ export function Wheel({ recipes, locale }: { recipes: RecipeSummary[]; locale: L
   const sliceAngle = wheelRecipes.length > 0 ? 360 / wheelRecipes.length : 0;
   const winner = winnerIndex !== null ? wheelRecipes[winnerIndex] : null;
 
-  function handleSearch() {
-    const q = query.trim().toLowerCase();
+  function handleSearch(override?: string) {
+    const q = (override ?? query).trim().toLowerCase();
+    if (override !== undefined) setQuery(override);
     setWinnerIndex(null);
     setRotation(0);
     setSearched(true);
@@ -101,12 +108,48 @@ export function Wheel({ recipes, locale }: { recipes: RecipeSummary[]; locale: L
         />
         <button
           type="button"
-          onClick={handleSearch}
-          className="rounded-md bg-foreground text-background px-4 py-2 text-sm font-medium"
+          onClick={() => handleSearch()}
+          className="rounded-md bg-accent text-black px-4 py-2 text-sm font-semibold hover:brightness-110 transition"
         >
           {strings.wheelFind}
         </button>
       </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-2 -mt-2">
+        <span className="text-xs opacity-60">{strings.wheelSuggestions}</span>
+        {SUGGESTIONS.map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => handleSearch(s)}
+            className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 text-xs capitalize hover:border-accent hover:text-accent transition-colors"
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      {wheelRecipes.length === 0 && (
+        <div className="relative my-2" style={{ width: 280, height: 280 }} aria-hidden>
+          <div
+            className="absolute inset-0 rounded-full border-4 border-white/15 shadow-lg animate-[spin_60s_linear_infinite] opacity-80"
+            style={{
+              background: `conic-gradient(${IDLE_EMOJI.map(
+                (_, i) => `${SLICE_COLORS[i % SLICE_COLORS.length]} ${i * 45}deg ${(i + 1) * 45}deg`,
+              ).join(", ")})`,
+            }}
+          >
+            {IDLE_EMOJI.map((e, i) => (
+              <div key={i} className="absolute inset-0" style={{ transform: `rotate(${i * 45 + 22.5}deg)` }}>
+                <div className="absolute left-1/2 top-3 -translate-x-1/2 text-2xl leading-none drop-shadow">{e}</div>
+              </div>
+            ))}
+          </div>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-16 w-16 items-center justify-center rounded-full bg-background border-4 border-accent text-2xl shadow-lg">
+            ?
+          </div>
+        </div>
+      )}
 
       {searched && wheelRecipes.length === 0 && (
         <p className="text-sm opacity-70">{strings.wheelNoMatches}</p>
@@ -147,13 +190,16 @@ export function Wheel({ recipes, locale }: { recipes: RecipeSummary[]; locale: L
                 );
               })}
             </div>
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full bg-background border-4 border-accent text-xl shadow-lg" aria-hidden>
+              🍽
+            </div>
           </div>
 
           <button
             type="button"
             onClick={handleSpin}
             disabled={spinning}
-            className="rounded-full bg-foreground text-background px-6 py-2 text-sm font-medium disabled:opacity-50"
+            className="rounded-full bg-accent text-black px-8 py-2.5 text-sm font-semibold hover:brightness-110 transition disabled:opacity-50"
           >
             {spinning ? strings.wheelSpinning : strings.wheelSpin}
           </button>
@@ -161,15 +207,19 @@ export function Wheel({ recipes, locale }: { recipes: RecipeSummary[]; locale: L
       )}
 
       {winner && (
-        <div className="flex flex-col items-center gap-3 rounded-lg border border-black/10 dark:border-white/15 p-6 text-center">
-          <div className="text-4xl">{winner.imageEmoji}</div>
+        <div className="group flex w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-accent/60 text-center shadow-lg shadow-black/30">
+          <div className="relative aspect-video">
+            <DishMedia slug={winner.slug} emoji={winner.imageEmoji} title={winner.title} sizes="384px" />
+          </div>
+          <div className="flex flex-col items-center gap-3 p-5">
           <h2 className="text-xl font-semibold">{winner.title}</h2>
           <Link
             href={`/recipes/${winner.slug}`}
-            className="rounded-full bg-foreground text-background px-4 py-2 text-sm font-medium"
+            className="rounded-full bg-accent text-black px-5 py-2 text-sm font-semibold hover:brightness-110 transition"
           >
             {strings.wheelCookThis}
           </Link>
+          </div>
         </div>
       )}
 

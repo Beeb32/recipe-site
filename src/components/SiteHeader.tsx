@@ -10,14 +10,18 @@ export async function SiteHeader() {
   const strings = t(locale);
 
   return (
-    <header className="border-b border-black/10 dark:border-white/15">
-      <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <Link href="/" className="font-semibold tracking-tight">
-          🍳 What to cook
+    <header className="border-b border-black/10 dark:border-white/10 sticky top-0 z-20 bg-background/85 backdrop-blur">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3">
+        <Link href="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent text-black text-base" aria-hidden>
+            🍳
+          </span>
+          <span className="text-lg hidden min-[420px]:inline">What to cook</span>
         </Link>
-        <nav className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          <Link href="/wheel" className="underline underline-offset-2">
-            {strings.wheelNavLink}
+        <nav className="flex items-center gap-x-3 sm:gap-x-4 text-sm">
+          <Link href="/wheel" className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition">
+            <span className="sm:hidden">{strings.wheelNavShort}</span>
+            <span className="hidden sm:inline">{strings.wheelNavLink}</span>
           </Link>
           <LanguageToggle locale={locale} />
           {user ? (
@@ -37,7 +41,7 @@ export async function SiteHeader() {
               <Link href="/login" className="underline underline-offset-2">
                 {strings.logIn}
               </Link>
-              <Link href="/signup" className="underline underline-offset-2">
+              <Link href="/signup" className="rounded-full bg-accent text-black px-3.5 py-1 font-medium hover:brightness-110 transition">
                 {strings.signUp}
               </Link>
             </>
