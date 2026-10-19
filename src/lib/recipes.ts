@@ -267,3 +267,38 @@ export async function searchRecipesByIngredients(tags: string[]): Promise<{ slug
   }
   return results;
 }
+
+// Ingredient lines (localized text + canonical ingredient name) for a handful of recipes at once - what the
+// meal planner's shopping list is built from.
+export async function getIngredientLinesForSlugs(
+  slugs: string[],
+  locale: Locale = "en",
+): Promise<{ slug: string; title: string; servings: number; lines: { text: string; name: string }[] }[]> {
+  if (slugs.length === 0) return [];
+  const rows = await prisma.recipe.findMany({
+    where: { slug: { in: slugs } },
+    select: {
+      slug: true,
+      title: true,
+      servings: true,
+      translations: { where: { locale }, select: { title: true } },
+      recipeIngredients: {
+        orderBy: { position: "asc" },
+        select: {
+          displayText: true,
+          ingredient: { select: { name: true } },
+          translations: { where: { locale }, select: { displayText: true } },
+        },
+      },
+    },
+  });
+  return rows.map((r) => ({
+    slug: r.slug,
+    title: r.translations[0]?.title ?? r.title,
+    servings: r.servings,
+    lines: r.recipeIngredients.map((ri) => ({
+      text: ri.translations[0]?.displayText ?? ri.displayText,
+      name: ri.ingredient.name,
+    })),
+  }));
+}

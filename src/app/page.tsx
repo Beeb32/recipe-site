@@ -29,6 +29,12 @@ export default async function Home() {
           >
             🎡 {strings.spinTheWheel}
           </Link>
+          <Link
+            href="/planner"
+            className="rounded-full border border-black/15 dark:border-white/25 px-6 py-2.5 text-sm font-medium hover:border-accent hover:text-accent transition"
+          >
+            {strings.plannerNavLink}
+          </Link>
         </div>
         <p className="mt-6 text-xs opacity-50">{strings.recipeCount(recipes.length)}</p>
       </section>

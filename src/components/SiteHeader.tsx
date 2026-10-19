@@ -18,10 +18,16 @@ export async function SiteHeader() {
           </span>
           <span className="text-lg hidden min-[420px]:inline">What to cook</span>
         </Link>
-        <nav className="flex items-center gap-x-3 sm:gap-x-4 text-sm">
-          <Link href="/wheel" className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition">
-            <span className="sm:hidden">{strings.wheelNavShort}</span>
+        <nav className="flex items-center gap-x-2.5 sm:gap-x-4 text-sm">
+          <Link href="/wheel" title={strings.wheelNavLink} className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition whitespace-nowrap">
+            <span className="min-[420px]:hidden" aria-label={strings.wheelNavLink}>{strings.wheelNavShort.split(" ")[0]}</span>
+            <span className="hidden min-[420px]:inline sm:hidden">{strings.wheelNavShort}</span>
             <span className="hidden sm:inline">{strings.wheelNavLink}</span>
+          </Link>
+          <Link href="/planner" title={strings.plannerNavLink} className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition whitespace-nowrap">
+            <span className="min-[420px]:hidden" aria-label={strings.plannerNavLink}>{strings.plannerNavShort.split(" ")[0]}</span>
+            <span className="hidden min-[420px]:inline sm:hidden">{strings.plannerNavShort}</span>
+            <span className="hidden sm:inline">{strings.plannerNavLink}</span>
           </Link>
           <LanguageToggle locale={locale} />
           {user ? (
@@ -38,10 +44,10 @@ export async function SiteHeader() {
             </>
           ) : (
             <>
-              <Link href="/login" className="underline underline-offset-2">
+              <Link href="/login" className="underline underline-offset-2 whitespace-nowrap">
                 {strings.logIn}
               </Link>
-              <Link href="/signup" className="rounded-full bg-accent text-black px-3.5 py-1 font-medium hover:brightness-110 transition">
+              <Link href="/signup" className="rounded-full bg-accent text-black px-3.5 py-1 font-medium whitespace-nowrap hover:brightness-110 transition">
                 {strings.signUp}
               </Link>
             </>
