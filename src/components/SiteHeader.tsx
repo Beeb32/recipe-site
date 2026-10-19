@@ -19,11 +19,6 @@ export async function SiteHeader() {
           <span className="text-lg hidden min-[420px]:inline">What to cook</span>
         </Link>
         <nav className="flex items-center gap-x-2.5 sm:gap-x-4 text-sm">
-          <Link href="/wheel" title={strings.wheelNavLink} className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition whitespace-nowrap">
-            <span className="min-[420px]:hidden" aria-label={strings.wheelNavLink}>{strings.wheelNavShort.split(" ")[0]}</span>
-            <span className="hidden min-[420px]:inline sm:hidden">{strings.wheelNavShort}</span>
-            <span className="hidden sm:inline">{strings.wheelNavLink}</span>
-          </Link>
           <Link href="/planner" title={strings.plannerNavLink} className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 hover:border-accent hover:text-accent transition whitespace-nowrap">
             <span className="min-[420px]:hidden" aria-label={strings.plannerNavLink}>{strings.plannerNavShort.split(" ")[0]}</span>
             <span className="hidden min-[420px]:inline sm:hidden">{strings.plannerNavShort}</span>
