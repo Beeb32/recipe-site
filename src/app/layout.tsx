@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getLocale } from "@/lib/locale";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -59,6 +60,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <SiteHeader />
         <div className="flex-1 flex flex-col">{children}</div>
+        <Analytics />
       </body>
     </html>
   );
