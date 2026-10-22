@@ -144,3 +144,31 @@ test("bracketed metric weights and Bulgarian lists", () => {
   assert.equal(meat.label, "Пилешки бутчета");
   assert.deepEqual(meat.amounts, [{ unit: "g", value: 910 }]);
 });
+
+import { bgStem, bgTermMatches } from "../src/lib/bgSearch.ts";
+
+test("Bulgarian search: plurals match, substrings do not", () => {
+  for (const pair of [["чушка", "чушки"], ["чушки", "чушката"], ["домат", "доматите"], ["яйце", "яйца"], ["лук", "лукове"], ["сирене", "сиренето"], ["фъстък", "фъстъци"], ["червен", "червената"], ["пиле", "пилета"], ["мляко", "млякото"]]) {
+    assert.equal(bgStem(pair[0]), bgStem(pair[1]), pair.join(" / "));
+  }
+  assert.equal(bgTermMatches("чушки", "чушка"), true);
+  assert.equal(bgTermMatches("чушка", "чушки"), true);
+  assert.equal(bgTermMatches("червена чушка", "чушки"), true);
+  assert.equal(bgTermMatches("червена чушка", "червен лук"), false);
+  // the old substring check let these through
+  assert.equal(bgTermMatches("осолено говеждо", "сол"), false);
+  assert.equal(bgTermMatches("шоколад", "око"), false);
+  assert.equal(bgTermMatches("оризов оцет", "ориз"), false);
+  assert.equal(bgTermMatches("доматен сос", "домат"), false);
+  assert.equal(bgTermMatches("ориз басмати", "ориз"), true);
+  assert.equal(bgTermMatches("кисело мляко", "кисело мляко"), true);
+});
+
+test("Bulgarian search: meat adjectives, yogurt is not milk", () => {
+  assert.equal(bgTermMatches("пилешки гърди", "пиле"), true);
+  assert.equal(bgTermMatches("свинско месо", "свинско"), true);
+  assert.equal(bgTermMatches("агнешко", "агне"), true);
+  assert.equal(bgTermMatches("кисело мляко", "мляко"), false);
+  assert.equal(bgTermMatches("кисело мляко", "кисело мляко"), true);
+  assert.equal(bgTermMatches("кокосово мляко", "мляко"), true);
+});

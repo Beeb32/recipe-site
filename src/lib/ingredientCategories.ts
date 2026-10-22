@@ -1,3 +1,5 @@
+import { bgStem } from "@/lib/bgSearch";
+
 // Curated ingredient categories for search - lets "cheese" find parmesan and
 // mozzarella, and "meat" find chicken and beef, even though those canonical
 // ingredient names don't literally contain the word. Hand-picked rather than
@@ -123,7 +125,10 @@ for (const [category, names] of Object.entries(ingredientCategories)) {
   }
 }
 
+// The same aliases by stem, so "сирена" / "сиренето" / "месото" / "рибите" also resolve (see lib/bgSearch.ts).
+const categoryAliasesByStem = new Map<string, string>(Object.entries(categoryAliases).map(([k, v]) => [bgStem(k), v]));
+
 export function ingredientInCategory(entryName: string, categoryQuery: string): boolean {
-  const resolved = categoryAliases[categoryQuery] ?? categoryQuery;
+  const resolved = categoryAliases[categoryQuery] ?? categoryAliasesByStem.get(bgStem(categoryQuery)) ?? categoryQuery;
   return categoriesByIngredient.get(entryName)?.has(resolved) ?? false;
 }

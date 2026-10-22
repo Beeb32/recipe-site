@@ -1,3 +1,6 @@
+import { bgTermMatches, hasCyrillic } from "@/lib/bgSearch";
+import { INGREDIENT_NAMES_BG } from "@/lib/ingredientNamesBg";
+
 // Bulgarian search vocabulary for the canonical (English) ingredient names.
 // Search always matches against Ingredient.name, which has no per-locale
 // column (see prisma/schema.prisma) - so without this, typing a Bulgarian
@@ -514,7 +517,10 @@ export const ingredientTranslationsBg: Record<string, string[]> = {
 };
 
 export function bgIngredientMatches(entryName: string, q: string): boolean {
-  const terms = ingredientTranslationsBg[entryName];
-  if (!terms) return false;
-  return terms.some((term) => term.includes(q));
+  // Only a Bulgarian query is looked up here; English queries are handled by the name matching in ingredientMatch.ts.
+  if (!hasCyrillic(q)) return false;
+  const terms = ingredientTranslationsBg[entryName] ?? [];
+  if (terms.some((term) => bgTermMatches(term, q))) return true;
+  const generic = INGREDIENT_NAMES_BG[entryName];
+  return generic !== undefined && bgTermMatches(generic, q);
 }
