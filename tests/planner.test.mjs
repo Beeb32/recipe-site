@@ -129,3 +129,18 @@ test("auto-fill still works with a tiny catalogue", () => {
   assert.equal(Object.keys(plan).length, 21);
   assert.ok(MEALS.every((m) => plan[slotKey(0, m)] === "only"));
 });
+
+test("bracketed metric weights and Bulgarian lists", () => {
+  const a = parseLine("1 lb (450g) spaghetti");
+  assert.deepEqual([a.value, a.unit, a.rest], [450, "g", "spaghetti"]);
+  const b = parseLine("1/2 lb (225г) свинска кайма");
+  assert.deepEqual([b.value, b.unit], [225, "g"]);
+  const groups = aggregate(
+    [{ slug: "x", title: "X", count: 1, lines: [{ text: "2 lb chicken thighs", name: "chicken thighs" }, { text: "1 cup flour", name: "flour" }] }],
+    "bg",
+    { "chicken thighs": "Пилешки бутчета" },
+  );
+  const meat = groups.find((g) => g.aisle === "meat").items[0];
+  assert.equal(meat.label, "Пилешки бутчета");
+  assert.deepEqual(meat.amounts, [{ unit: "g", value: 910 }]);
+});

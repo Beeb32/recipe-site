@@ -26,8 +26,8 @@ const UNITS: Record<string, string> = {
   cup: "cup", cups: "cup", чаша: "cup", чаши: "cup",
   tbsp: "tbsp", tablespoon: "tbsp", tablespoons: "tbsp", "с.л.": "tbsp", "с.л": "tbsp",
   tsp: "tsp", teaspoon: "tsp", teaspoons: "tsp", "ч.л.": "tsp", "ч.л": "tsp",
-  oz: "oz", ounce: "oz", ounces: "oz",
-  lb: "lb", lbs: "lb", pound: "lb", pounds: "lb",
+  oz: "oz", ounce: "oz", ounces: "oz", унция: "oz", унции: "oz",
+  lb: "lb", lbs: "lb", pound: "lb", pounds: "lb", фунт: "lb", фунта: "lb",
   g: "g", gram: "g", grams: "g", г: "g",
   kg: "kg", кг: "kg",
   ml: "ml", мл: "ml",
@@ -70,7 +70,17 @@ export function parseLine(text: string): ParsedLine {
       after = after.slice(um[0].length);
     }
   }
-  return { value, unit, rest: after.replace(/^\s*(of\s+)?/i, "").trim() };
+  let rest = after.replace(/^\s*(of\s+)?/i, "").trim();
+  // "1 lb (450 g) pasta": the metric weight in brackets is the same amount - use it.
+  if (unit === "lb" || unit === "oz") {
+    const w = rest.match(/^\(\s*(?:about |около )?(\d+(?:[.,]\d+)?)\s*(g|г|ml|мл)\s*\)\s*/i);
+    if (w) {
+      value = toNumber(w[1]);
+      unit = /^(ml|мл)$/i.test(w[2]) ? "ml" : "g";
+      rest = rest.slice(w[0].length);
+    }
+  }
+  return { value, unit, rest };
 }
 
 // ---- which aisle an ingredient belongs to ----
@@ -80,9 +90,9 @@ const PANTRY_FIRST =
 const SPICES =
   /(^|\b)(salt|salt and pepper|black pepper|white pepper|peppercorns?|cumin|paprika|turmeric|cinnamon|cloves?|cardamom( pods)?|oregano|thyme|nutmeg|saffron|garam masala|curry powder|bay leaf|bay leaves|star anise|fennel seeds?|sumac|za'?atar|allspice|marjoram|rosemary|sage|vanilla( extract)?|asafoetida|mustard seeds?|sesame seeds?|ground [a-z ]+|chili (flakes|powder)|red pepper flakes|cayenne( pepper)?|aleppo pepper|chole masala|pav bhaji masala|kasuri methi|amchur|anise|marash|(garlic|onion|ginger|chili|chile) powder)\b/;
 const DAIRY =
-  /\b(milk|butter|cheese|cream|yogurt|eggs?|ghee|buttermilk|mozzarella|parmesan|parmigiano|feta|ricotta|halloumi|kefalotyri|mascarpone|paneer|pecorino|cheddar|gruyere|egg yolks?|egg whites?|creme fraiche)\b/;
+  /\b(milk|butter|cheese|cream|yogurt|eggs?|ghee|buttermilk|mozzarella|parmesan|parmigiano|feta|ricotta|sirene|kashkaval|labneh|kefir|halloumi|kefalotyri|mascarpone|paneer|pecorino|cheddar|gruyere|egg yolks?|egg whites?|creme fraiche)\b/;
 const MEAT =
-  /\b(chicken|beef|pork|lamb|veal|bacon|sausage|ham|turkey|duck|rabbit|fish|salmon|tuna|cod|shrimp|prawns?|anchov(y|ies)|squid|crab|lobster|mince|brisket|ribs|steak|chorizo|tilapia|sardines?)\b/;
+  /\b(chicken|beef|pork|lamb|veal|bacon|sausage|ham|turkey|duck|rabbit|fish|salmon|tuna|cod|shrimp|prawns?|anchov(y|ies)|squid|crab|lobster|mince|brisket|ribs|steak|chorizo|tilapia|sardines?|prosciutto|guanciale|pancetta|salami|haddock|liver|jowl|mutton|oxtail)\b/;
 const PRODUCE =
   /\b(onions?|shallots?|garlic|ginger|tomato(es)?|potato(es)?|carrots?|celery|lettuce|spinach|kale|cabbage|cauliflower|broccoli|zucchini|eggplant|cucumber|peppers?|chil(i|ies|e|es)|jalape\w*|poblano|mushrooms?|lemons?|limes?|apples?|bananas?|oranges?|avocados?|parsley|cilantro|coriander leaves|basil|mint|dill|chives|scallions?|green onions?|leeks?|pumpkin|squash|beets?|radish(es)?|berries|strawberr\w*|mango|pineapple|peas|corn|plantains?|papaya|lemongrass|galangal|kaffir lime leaves|curry leaves|tomatillos?|arugula|fennel|asparagus|green beans|dates)\b/;
 const BAKERY = /\b(bread|pita|tortillas?|buns?|rolls?|naan|pav|baguette|croissants?|pastry|dough|waffles?|bagels?)\b/;
@@ -103,7 +113,7 @@ export function aisleOf(name: string): Aisle {
 // ---- building the list ----
 
 function cleanLabel(rest: string): string {
-  let label = rest.split(/[,(]/)[0].trim();
+  let label = rest.replace(/^\([^)]*\)\s*/, "").split(/[,(]/)[0].trim();
   label = label.replace(/^(a|an|the)\s+/i, "");
   return label.length > 0 ? label : rest.trim();
 }
@@ -112,7 +122,7 @@ function capitalize(s: string): string {
   return s.length > 0 ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
-export function aggregate(planned: PlannedRecipe[], locale: "en" | "bg"): ShoppingGroup[] {
+export function aggregate(planned: PlannedRecipe[], locale: "en" | "bg", names: Record<string, string> = {}): ShoppingGroup[] {
   const items = new Map<string, ShoppingItem>();
   for (const recipe of planned) {
     for (const line of recipe.lines) {
@@ -122,7 +132,7 @@ export function aggregate(planned: PlannedRecipe[], locale: "en" | "bg"): Shoppi
       if (!item) {
         item = {
           key,
-          label: capitalize(locale === "bg" ? cleanLabel(parsed.rest) : line.name),
+          label: capitalize(locale === "bg" ? (names[key] ?? cleanLabel(parsed.rest)) : line.name),
           aisle: aisleOf(line.name),
           amounts: [],
           recipes: [],
@@ -135,10 +145,16 @@ export function aggregate(planned: PlannedRecipe[], locale: "en" | "bg"): Shoppi
         item.noAmount = true;
         continue;
       }
-      const value = parsed.value * recipe.count;
-      const existing = item.amounts.find((a) => a.unit === parsed.unit);
+      let unit = parsed.unit;
+      let value = parsed.value * recipe.count;
+      if (locale === "bg" && (unit === "lb" || unit === "oz")) {
+        // metric for the Bulgarian list
+        value = Math.round((value * (unit === "lb" ? 454 : 28.35)) / 5) * 5;
+        unit = "g";
+      }
+      const existing = item.amounts.find((a) => a.unit === unit);
       if (existing) existing.value += value;
-      else item.amounts.push({ unit: parsed.unit, value });
+      else item.amounts.push({ unit, value });
     }
   }
   // 3+ teaspoons read better as tablespoons, 1000+ g / ml as kg / l.

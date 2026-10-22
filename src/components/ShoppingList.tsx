@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/lib/locale";
 import { t } from "@/lib/i18n";
+import { INGREDIENT_NAMES_BG } from "@/lib/ingredientNamesBg";
 import { aggregate, formatAmounts, type ShoppingGroup, type IngredientLine } from "@/lib/shopping";
 
 type Fetched = { slug: string; title: string; servings: number; lines: IngredientLine[] }[];
@@ -68,6 +69,7 @@ export function ShoppingList({
         ? aggregate(
             data.map((r) => ({ slug: r.slug, title: r.title, count: counts[r.slug] ?? 1, lines: r.lines })),
             locale,
+            locale === "bg" ? INGREDIENT_NAMES_BG : {},
           )
         : [],
     [data, counts, locale],
